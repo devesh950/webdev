@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
+import { restaurant } from '@/data/restaurant';
 import { siteConfig } from '@/lib/site';
 import { cn } from '@/lib/utils';
 
@@ -58,7 +59,7 @@ export function SiteNav() {
   }, []);
 
   const isActive = (href: string) =>
-    href === '/' ? pathname === '/' : pathname.startsWith(href.split('#')[0] ?? href);
+    href === '/' ? pathname === '/' : pathname.startsWith(href);
 
   return (
     <>
@@ -74,11 +75,7 @@ export function SiteNav() {
           aria-label="Primary"
           className="shell-wide flex h-[var(--nav-height)] items-center justify-between gap-6"
         >
-          <Link
-            href="/"
-            className="group flex items-center gap-3"
-            aria-label={`${siteConfig.name} — home`}
-          >
+          <Link href="/" className="group flex items-center gap-3" aria-label={`${restaurant.name} — home`}>
             <span
               aria-hidden="true"
               className="grid h-9 w-9 place-items-center rounded-full border border-[rgba(200,169,107,0.4)] bg-[rgba(200,169,107,0.08)] transition-colors duration-500 group-hover:border-[var(--gold)]"
@@ -89,23 +86,23 @@ export function SiteNav() {
               </svg>
             </span>
             <span className="flex flex-col leading-none">
-              <span className="font-display text-[1.05rem] tracking-[0.02em] text-ivory">
-                Hajipur Food
+              <span className="font-display text-[1.02rem] tracking-[0.01em] text-ivory">
+                The Taj
               </span>
-              <span className="mt-1 text-[0.56rem] uppercase tracking-[0.34em] text-[var(--gold)]">
-                {siteConfig.location.label}
+              <span className="mt-1 text-[0.56rem] uppercase tracking-[0.3em] text-[var(--gold)]">
+                Multicuisine · Hajipur
               </span>
             </span>
           </Link>
 
-          <ul className="hidden items-center gap-9 lg:flex">
+          <ul className="hidden items-center gap-7 lg:flex">
             {siteConfig.primaryNav.map((item) => (
               <li key={item.href}>
                 <Link
                   href={item.href}
                   aria-current={isActive(item.href) ? 'page' : undefined}
                   className={cn(
-                    'link-underline text-[0.875rem] transition-colors duration-300',
+                    'link-underline text-[0.85rem] transition-colors duration-300',
                     isActive(item.href) ? 'text-[var(--gold)]' : 'text-[var(--muted)] hover:text-ivory',
                   )}
                 >
@@ -116,9 +113,14 @@ export function SiteNav() {
           </ul>
 
           <div className="hidden items-center gap-3 lg:flex">
-            <Link href="/partner" className="btn btn-primary min-h-[42px] px-5 text-[0.8125rem]">
-              Partner With Us
-            </Link>
+            <a
+              href={restaurant.googleMaps.directionsUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn btn-primary min-h-[42px] px-5 text-[0.8125rem]"
+            >
+              Get Directions
+            </a>
           </div>
 
           <button
@@ -177,18 +179,21 @@ export function SiteNav() {
                 variants={linkMotion}
                 initial={reduceMotion ? undefined : 'hidden'}
                 animate="show"
-                transition={{ delay: 0.36, duration: 0.5 }}
+                transition={{ delay: 0.4, duration: 0.5 }}
                 className="flex flex-col gap-3"
               >
-                <Link
-                  href="/partner"
+                <a
+                  href={restaurant.googleMaps.directionsUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   onClick={() => setMenuOpen(false)}
                   className="btn btn-primary w-full"
                 >
-                  Partner With Us
-                </Link>
+                  Get Directions
+                </a>
                 <p className="text-[0.8125rem] text-[var(--muted-dim)]">
-                  {siteConfig.tagline}
+                  {restaurant.address.locality}, {restaurant.address.region},{' '}
+                  {restaurant.address.country}
                 </p>
               </motion.div>
             </div>

@@ -3,7 +3,8 @@ import { Fraunces, Inter } from 'next/font/google';
 
 import { SiteFooter } from '@/components/site-footer';
 import { SiteNav } from '@/components/site-nav';
-import { jsonLdScript, websiteStructuredData } from '@/lib/structured-data';
+import { restaurant } from '@/data/restaurant';
+import { jsonLdScript, restaurantStructuredData, websiteStructuredData } from '@/lib/structured-data';
 import { siteConfig } from '@/lib/site';
 
 import './globals.css';
@@ -26,37 +27,40 @@ const sans = Inter({
 export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.url),
   title: {
-    default: `${siteConfig.name} — ${siteConfig.tagline}`,
-    template: `%s · ${siteConfig.name}`,
+    default: `${restaurant.name} — ${restaurant.category} in ${siteConfig.location.label}`,
+    template: `%s · ${restaurant.name}`,
   },
   description: siteConfig.description,
-  applicationName: siteConfig.name,
+  applicationName: restaurant.name,
   keywords: [
-    'restaurants in Hajipur',
-    'Hajipur food',
-    'best restaurants Hajipur',
-    'biryani in Hajipur',
+    'The Taj Multicuisine Restaurant',
+    'restaurant in Hajipur',
     'family dining Hajipur',
-    'North Indian food Hajipur',
-    'vegetarian restaurants Hajipur',
-    'Hajipur Bihar restaurants',
-    'restaurant website design Bihar',
+    'North Indian restaurant Hajipur',
+    'Mughlai restaurant Hajipur',
+    'multicuisine restaurant Bihar',
+    'group dining Hajipur',
+    'restaurants near Hajipur',
   ],
-  authors: [{ name: siteConfig.name }],
-  creator: siteConfig.name,
+  authors: [{ name: restaurant.name }],
+  creator: restaurant.name,
   alternates: { canonical: '/' },
   openGraph: {
     type: 'website',
     locale: siteConfig.locale,
     url: siteConfig.url,
-    siteName: siteConfig.name,
-    title: `${siteConfig.name} — ${siteConfig.tagline}`,
+    siteName: restaurant.name,
+    title: `${restaurant.name} — ${restaurant.category} in ${siteConfig.location.label}`,
     description: siteConfig.description,
   },
   twitter: {
     card: 'summary_large_image',
-    title: `${siteConfig.name} — ${siteConfig.tagline}`,
+    title: `${restaurant.name} — ${siteConfig.location.label}`,
     description: siteConfig.description,
+  },
+  icons: {
+    icon: [{ url: '/favicon.ico', sizes: '48x48' }, { url: '/favicon.ico', sizes: '32x32' }],
+    shortcut: '/favicon.ico',
   },
   robots: {
     index: true,
@@ -68,10 +72,6 @@ export const metadata: Metadata = {
       'max-snippet': -1,
       'max-video-preview': -1,
     },
-  },
-  icons: {
-    icon: [{ url: '/favicon.ico', sizes: '48x48' }, { url: '/favicon.ico', sizes: '32x32' }],
-    shortcut: '/favicon.ico',
   },
   category: 'food',
 };
@@ -125,6 +125,10 @@ export default function RootLayout({
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: jsonLdScript(websiteStructuredData()) }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: jsonLdScript(restaurantStructuredData()) }}
         />
       </body>
     </html>

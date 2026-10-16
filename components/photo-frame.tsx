@@ -4,6 +4,9 @@ import { CreditChip } from '@/components/illustrative-note';
 import type { PhotoAsset } from '@/lib/images';
 import { cn } from '@/lib/utils';
 
+/** Where the licensing chip sits. Move it when the image carries a caption. */
+type CreditPosition = 'bottom-left' | 'top-right';
+
 type PhotoFrameProps = {
   image: PhotoAsset;
   priority?: boolean;
@@ -13,8 +16,14 @@ type PhotoFrameProps = {
   /** Adds the slow cinematic scale on hover. */
   zoom?: boolean;
   showCredit?: boolean;
+  creditPosition?: CreditPosition;
   /** Renders as a plain div when the parent element owns the semantics. */
   as?: 'div' | 'figure';
+};
+
+const CREDIT_POSITIONS: Record<CreditPosition, string> = {
+  'bottom-left': 'absolute bottom-3 left-3 z-10',
+  'top-right': 'absolute right-3 top-3 z-10',
 };
 
 export function PhotoFrame({
@@ -25,6 +34,7 @@ export function PhotoFrame({
   imageClassName,
   zoom = false,
   showCredit = true,
+  creditPosition = 'bottom-left',
   as: Tag = 'div',
 }: PhotoFrameProps) {
   return (
@@ -46,7 +56,7 @@ export function PhotoFrame({
         )}
       />
       {showCredit ? (
-        <span className="absolute bottom-3 left-3 z-10">
+        <span className={CREDIT_POSITIONS[creditPosition]}>
           <CreditChip credit={image.credit} />
         </span>
       ) : null}

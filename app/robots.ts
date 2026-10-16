@@ -8,8 +8,6 @@ export default function robots(): MetadataRoute.Robots {
       {
         userAgent: '*',
         allow: '/',
-        // The enquiry endpoint and any future private area stay out of the index.
-        disallow: ['/api/', '/admin/'],
       },
     ],
     sitemap: `${siteConfig.url}/sitemap.xml`,

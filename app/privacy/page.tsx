@@ -1,13 +1,11 @@
 import type { Metadata } from 'next';
-import Link from 'next/link';
 
-import { SectionHeading } from '@/components/section-heading';
+import { restaurant } from '@/data/restaurant';
 import { siteConfig } from '@/lib/site';
 
 export const metadata: Metadata = {
-  title: 'Privacy Policy',
-  description:
-    'How Hajipur Food collects, stores and uses enquiry data submitted through the restaurant website consultation form.',
+  title: `Privacy Policy — ${restaurant.name}`,
+  description: `How this website handles information about ${restaurant.name} and its visitors.`,
   alternates: { canonical: '/privacy' },
 };
 
@@ -18,12 +16,11 @@ export default function PrivacyPage() {
     <>
       <header className="border-b border-[var(--line)] pb-14 pt-[calc(var(--nav-height)+3.5rem)]">
         <div className="shell">
-          <SectionHeading
-            eyebrow="Legal"
-            title="Privacy Policy"
-            description={`Last updated ${updated}. Written to be read, not to be survived.`}
-            as="h1"
-          />
+          <p className="eyebrow">Legal</p>
+          <h1 className="mt-5 text-display-md text-ivory">Privacy Policy</h1>
+          <p className="mt-5 max-w-[54ch] text-[1.0625rem] leading-relaxed text-[var(--muted)]">
+            Last updated {updated}. Written to be read, not to be survived.
+          </p>
         </div>
       </header>
 
@@ -32,45 +29,32 @@ export default function PrivacyPage() {
           <div className="max-w-prose flex flex-col gap-10">
             {[
               {
-                heading: 'What we collect',
-                body: 'When you submit an enquiry we collect the details you type into the form: your name, restaurant name, phone or WhatsApp number, an optional business email, your current website status, the services you are interested in, an optional budget range, and any message you write. We also receive the standard technical information your browser sends with any request, such as your IP address and user agent, which we use for spam protection and rate limiting.',
+                heading: 'What this website collects',
+                body: 'This website does not run contact or enquiry forms, and it does not set any cookies. There is no analytics script, no advertising pixel and no third-party tracking.',
               },
               {
-                heading: 'Why we collect it',
-                body: 'So we can reply to your enquiry with a plan and a quote. We do not sell your details, and we do not add them to an unrelated mailing list.',
+                heading: 'Server logs',
+                body: 'Like any web server, the host records basic request information such as IP address, browser type and the page requested. This is used only to keep the site running and is not linked to any profile.',
               },
               {
-                heading: 'Where it is stored',
-                body: 'Enquiries are delivered to a business inbox or lead system configured by this website. In local development they are written to a local file that is excluded from version control. Both destinations are operated by us; no third-party advertising or analytics scripts receive form data.',
+                heading: 'External links',
+                body: 'Pages on this site link to Google Maps, where the restaurant has a verified listing. Once you follow those links you are on a Google service governed by Google’s own privacy policy. The same applies to the fonts served for this site.',
               },
               {
-                heading: 'How long we keep it',
-                body: 'For as long as the conversation with you is useful, and no longer than we reasonably need. Ask us to delete it at any time and we will.',
+                heading: 'Information published about the restaurant',
+                body: 'Only two facts about the restaurant are confirmed: its name and its Google Maps listing. Descriptions and cuisine highlights were supplied by the restaurant and may not be independently verified. Menu, prices, opening hours, phone numbers and street address are published only once confirmed directly by the restaurant — until then, this site states plainly that they are unavailable rather than guessing.',
               },
               {
-                heading: 'Cookies and analytics',
-                body: 'This site does not use advertising cookies. If analytics are added in future, this policy will be updated before they are enabled.',
+                heading: 'Photography',
+                body: 'Photography on this site is licensed stock imagery used to illustrate cuisine and atmosphere. It is not a photograph of this restaurant, and is labelled as illustrative wherever it appears.',
               },
               {
                 heading: 'Your rights',
-                body: `You can ask for a copy of the information we hold about you, ask us to correct it, or ask us to delete it. Contact us at ${
-                  siteConfig.enquiryEmail ? (
-                    <a
-                      href={`mailto:${siteConfig.enquiryEmail}?subject=${encodeURIComponent(
-                        'Privacy request',
-                      )}`}
-                      className="text-[var(--gold)] underline underline-offset-4"
-                    >
-                      {siteConfig.enquiryEmail}
-                    </a>
-                  ) : (
-                    'the address on our enquiry form'
-                  )
-                }.`,
+                body: 'Because this site does not collect personal information beyond ordinary server logs, there is no personal data held for you to request or delete. If you have a question about anything on this page, please raise it with the restaurant through the contact details on its Google Maps listing.',
               },
               {
-                heading: 'Restaurant listings',
-                body: 'Restaurant descriptions and cuisine highlights are supplied starting content and may not be fully verified. Photography on this site is licensed stock imagery and is not a photograph of the restaurants shown. Each listing links to its Google Maps record, which is the authoritative source for that business’s own information.',
+                heading: 'Changes to this policy',
+                body: 'This policy will be updated if the website later gains contact forms, online ordering or reservation features.',
               },
             ].map((block) => (
               <section key={block.heading}>
@@ -82,13 +66,14 @@ export default function PrivacyPage() {
             ))}
 
             <div className="rounded-card border border-[var(--line)] bg-[var(--surface)] p-7">
-              <h2 className="font-display text-[1.25rem] text-ivory">Ready to talk?</h2>
+              <h2 className="font-display text-[1.25rem] text-ivory">Find the restaurant</h2>
               <p className="mt-3 text-[0.9375rem] leading-relaxed text-[var(--muted)]">
-                The consultation form is the quickest route to a reply.
+                Location and directions are on the{' '}
+                <a href="/location" className="text-[var(--gold)] underline underline-offset-4">
+                  location page
+                </a>
+                , and the verified listing is on Google Maps.
               </p>
-              <Link href="/partner" className="btn btn-primary mt-6">
-                Request My Consultation
-              </Link>
             </div>
           </div>
         </div>

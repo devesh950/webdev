@@ -1,21 +1,21 @@
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, MapPin } from 'lucide-react';
 import Link from 'next/link';
 
 import { Reveal } from '@/components/reveal';
-import { siteConfig } from '@/lib/site';
+import { restaurant } from '@/data/restaurant';
 
 /**
- * The owner-facing conversion band. Repeated at natural points through the
- * journey rather than hammered at every scroll stop.
+ * The recurring call to action. Used at the natural end of each section so the
+ * next step is always obvious without the page feeling pushy.
  */
 export function CtaBand({
-  eyebrow = 'For restaurant owners',
-  title = 'Your Restaurant Deserves a Remarkable Digital Presence.',
-  description = 'Turn your restaurant’s online presence into a destination where customers can explore your menu, discover your location, and connect with your business.',
-  primaryLabel = 'Build My Restaurant Website',
-  primaryHref = '/partner',
-  secondaryLabel = 'Request a Free Website Consultation',
-  secondaryHref = '/partner#consultation',
+  eyebrow = 'Visit us',
+  title = 'Pull up a chair.',
+  description = 'We are in Hajipur, Bihar. Get directions straight to our door — it is the fastest way to reach us while our own contact details are being confirmed.',
+  primaryLabel = 'Get Directions',
+  primaryHref = restaurant.googleMaps.directionsUrl,
+  secondaryLabel = 'Find Us',
+  secondaryHref = '/location',
 }: {
   eyebrow?: string;
   title?: string;
@@ -25,6 +25,8 @@ export function CtaBand({
   secondaryLabel?: string;
   secondaryHref?: string;
 }) {
+  const primaryIsExternal = primaryHref.startsWith('http');
+
   return (
     <section className="section-tight relative overflow-hidden border-block border-[var(--line)]">
       <div
@@ -45,22 +47,39 @@ export function CtaBand({
           </p>
 
           <div className="mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row">
-            <Link href={primaryHref} className="btn btn-primary group w-full sm:w-auto">
-              {primaryLabel}
-              <ArrowRight
-                size={16}
-                aria-hidden="true"
-                className="transition-transform duration-500 ease-editorial group-hover:translate-x-1"
-              />
-            </Link>
+            {primaryIsExternal ? (
+              <a
+                href={primaryHref}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn btn-primary group w-full sm:w-auto"
+              >
+                {primaryLabel}
+                <ArrowRight
+                  size={16}
+                  aria-hidden="true"
+                  className="transition-transform duration-500 ease-editorial group-hover:translate-x-1"
+                />
+              </a>
+            ) : (
+              <Link href={primaryHref} className="btn btn-primary group w-full sm:w-auto">
+                {primaryLabel}
+                <ArrowRight
+                  size={16}
+                  aria-hidden="true"
+                  className="transition-transform duration-500 ease-editorial group-hover:translate-x-1"
+                />
+              </Link>
+            )}
             <Link href={secondaryHref} className="btn btn-ghost w-full sm:w-auto">
+              <MapPin size={15} aria-hidden="true" className="text-[var(--gold)]" />
               {secondaryLabel}
             </Link>
           </div>
 
           <p className="mt-7 text-[0.8125rem] text-[var(--muted-dim)]">
-            {siteConfig.location.label} · No ranking or sales guarantees — a website built to
-            earn its place.
+            {restaurant.address.locality}, {restaurant.address.region} ·{' '}
+            {restaurant.address.country}
           </p>
         </Reveal>
       </div>

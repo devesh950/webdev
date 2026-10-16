@@ -5,29 +5,19 @@ import { ExternalLink, Info, MapPin, Navigation } from 'lucide-react';
 import Link from 'next/link';
 import { useState } from 'react';
 
-import type { Restaurant } from '@/data/restaurants';
-import { cn } from '@/lib/utils';
+import { restaurant } from '@/data/restaurant';
 
 /**
  * A stylised locator, not a survey-accurate map.
  *
- * We do not publish real coordinates for these businesses, so the pins sit on
- * an abstract diagram of Hajipur around the Gandaki/Ganges confluence. Every
- * pin links out to the verified Google Maps record, which is where real
- * navigation happens.
+ * We have not published an exact street address for this restaurant, so the pin
+ * sits on an abstract diagram of Hajipur around the Gandaki/Ganges confluence.
+ * Every action links out to the verified Google Maps record, which is where
+ * real navigation happens.
  */
-export function MapExplorer({ restaurants }: { restaurants: Restaurant[] }) {
-  const [activeSlug, setActiveSlug] = useState<string | null>(null);
+export function MapExplorer() {
+  const [active, setActive] = useState(false);
   const reduceMotion = useReducedMotion();
-
-  // Abstract relative placement, deliberately not geographic coordinates.
-  const placements: Record<string, { x: number; y: number }> = {
-    'the-taj-multicuisine-restaurant': { x: 300, y: 128 },
-    'desi-zaika-restaurant': { x: 774, y: 262 },
-    'golden-bowl': { x: 452, y: 236 },
-    'biryani-paradise': { x: 196, y: 392 },
-    'tcg-the-chaap-guru': { x: 686, y: 398 },
-  };
 
   return (
     <div className="grid gap-8 lg:grid-cols-[1.5fr_0.5fr]">
@@ -36,7 +26,7 @@ export function MapExplorer({ restaurants }: { restaurants: Restaurant[] }) {
         <svg
           viewBox="0 0 960 540"
           role="img"
-          aria-label="Stylised locator diagram of Hajipur with one pin per listed restaurant"
+          aria-label="Stylised locator diagram of Hajipur showing where The Taj Multicuisine Restaurant sits"
           className="block h-auto w-full"
         >
           <defs>
@@ -133,50 +123,43 @@ export function MapExplorer({ restaurants }: { restaurants: Restaurant[] }) {
             CITY CENTRE
           </text>
 
-          {/* Pins */}
-          {restaurants.map((restaurant) => {
-            const point = placements[restaurant.slug];
-            if (!point) return null;
-            const isActive = activeSlug === restaurant.slug;
-
-            return (
-              <g
-                key={restaurant.slug}
-                transform={`translate(${point.x}, ${point.y})`}
-                onMouseEnter={() => setActiveSlug(restaurant.slug)}
-                onMouseLeave={() => setActiveSlug(null)}
-              >
-                <motion.circle
-                  r="52"
-                  fill="url(#hf-halo)"
-                  animate={
-                    reduceMotion ? undefined : { scale: [0.92, 1.14, 0.92], opacity: [0.5, 1, 0.5] }
-                  }
-                  transition={{ duration: 3.4, repeat: Infinity, ease: 'easeInOut' }}
-                />
-                <circle
-                  r="15"
-                  fill="rgba(10,10,9,0.85)"
-                  stroke="#C8A96B"
-                  strokeWidth="1.6"
-                  style={{ transition: 'fill .3s ease' }}
-                  fillOpacity={isActive ? 0.3 : 1}
-                />
-                <circle r="5" fill="#C8A96B" />
-                <text
-                  y="-32"
-                  fill="#F7F3EB"
-                  fontSize="11.5"
-                  letterSpacing="0.16em"
-                  textAnchor="middle"
-                  fontFamily="var(--font-sans)"
-                  fontWeight="500"
-                >
-                  {restaurant.name.toUpperCase()}
-                </text>
-              </g>
-            );
-          })}
+          {/* Single pin */}
+          <g transform="translate(452, 236)" onMouseEnter={() => setActive(true)} onMouseLeave={() => setActive(false)}>
+            <motion.circle
+              r="54"
+              fill="url(#hf-halo)"
+              animate={reduceMotion ? undefined : { scale: [0.92, 1.14, 0.92], opacity: [0.5, 1, 0.5] }}
+              transition={{ duration: 3.4, repeat: Infinity, ease: 'easeInOut' }}
+            />
+            <circle
+              r="16"
+              fill="rgba(10,10,9,0.85)"
+              stroke="#C8A96B"
+              strokeWidth="1.8"
+              fillOpacity={active ? 0.32 : 1}
+            />
+            <circle r="5" fill="#C8A96B" />
+            <text
+              y="-34"
+              fill="#F7F3EB"
+              fontSize="12"
+              letterSpacing="0.18em"
+              textAnchor="middle"
+              fontFamily="var(--font-sans)"
+              fontWeight="500"
+            >
+              THE TAJ
+            </text>
+            <text
+              y="46"
+              fill="rgba(168,163,155,0.7)"
+              fontSize="11"
+              textAnchor="middle"
+              fontFamily="var(--font-sans)"
+            >
+              Multicuisine Restaurant
+            </text>
+          </g>
         </svg>
 
         <div className="border-t border-[var(--line)] p-5">
@@ -184,81 +167,72 @@ export function MapExplorer({ restaurants }: { restaurants: Restaurant[] }) {
             <Info size={13} className="mt-0.5 shrink-0 text-[var(--gold)]/70" aria-hidden="true" />
             <span>
               This is a stylised diagram of Hajipur, not a photograph or a survey-accurate
-              map. Pin positions are illustrative and are not exact addresses.
+              map. The pin shows the restaurant’s general area, not an exact street address.
             </span>
           </p>
         </div>
       </div>
 
-      {/* ------------------------------------------------------- list */}
+      {/* ------------------------------------------------------- panel */}
       <div className="flex flex-col gap-3">
-        <ul className="flex flex-col gap-3">
-          {restaurants.map((restaurant, index) => (
-            <li key={restaurant.slug}>
-              {/*
-                A stretched overlay carries the navigation while the real
-                content sits above it. The directions link must stay OUTSIDE
-                that anchor — nesting one <a> inside another is invalid HTML
-                and causes a hydration error.
-              */}
-              <div
-                onMouseEnter={() => setActiveSlug(restaurant.slug)}
-                onMouseLeave={() => setActiveSlug(null)}
-                className={cn(
-                  'group relative flex h-full gap-4 rounded-card border bg-[var(--surface)] p-5 transition-[border-color,transform,background-color] duration-500 ease-editorial',
-                  activeSlug === restaurant.slug
-                    ? '-translate-y-0.5 border-[rgba(200,169,107,0.4)] bg-[var(--surface-raised)]'
-                    : 'border-[var(--line)] hover:border-[rgba(200,169,107,0.3)]',
-                )}
-              >
-                <span
-                  aria-hidden="true"
-                  className="font-display text-[0.875rem] text-[rgba(200,169,107,0.6)]"
-                >
-                  {String(index + 1).padStart(2, '0')}
-                </span>
+        <div className="rounded-card border border-[var(--line)] bg-[var(--surface)] p-6">
+          <h2 className="flex items-center gap-2 font-display text-[1.15rem] text-ivory">
+            <MapPin size={16} className="text-[var(--gold)]" aria-hidden="true" />
+            The Taj Multicuisine Restaurant
+          </h2>
 
-                <div className="flex flex-1 flex-col gap-1.5">
-                  <h3 className="font-display text-[1.05rem] text-ivory transition-colors duration-300 group-hover:text-[var(--gold)]">
-                    {restaurant.name}
-                  </h3>
+          <address className="mt-4 text-[0.9375rem] not-italic leading-relaxed text-[var(--muted)]">
+            {restaurant.address.locality}, {restaurant.address.region}
+            <br />
+            {restaurant.address.country}
+          </address>
 
-                  <p className="text-[0.8125rem] text-[var(--muted)]">
-                    {restaurant.category}
-                  </p>
+          <p className="mt-3 text-[0.8125rem] leading-relaxed text-[var(--muted-dim)]">
+            A street-level address has not been published by the restaurant yet. The Google
+            Maps record below carries the exact location.
+          </p>
 
-                  <a
-                    href={restaurant.googleMaps.directionsUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="mt-1 inline-flex w-fit items-center gap-1.5 text-[0.75rem] text-[var(--muted-dim)] underline-offset-4 hover:text-[var(--gold)] hover:underline"
-                    aria-label={`Get directions to ${restaurant.name} on Google Maps`}
-                  >
-                    <Navigation size={11} aria-hidden="true" />
-                    Directions
-                    <ExternalLink size={10} aria-hidden="true" />
-                  </a>
-                </div>
+          <div className="mt-5 flex flex-col gap-2.5">
+            <a
+              href={restaurant.googleMaps.directionsUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn btn-primary w-full"
+            >
+              <Navigation size={15} aria-hidden="true" />
+              Get Directions
+            </a>
+            <a
+              href={restaurant.googleMaps.listingUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn btn-ghost w-full"
+            >
+              View Google Listing
+              <ExternalLink size={14} aria-hidden="true" />
+            </a>
+          </div>
+        </div>
 
-                {/* Whole-card click target, sitting under the visible content. */}
-                <Link
-                  href={`/restaurants/${restaurant.slug}`}
-                  className="absolute inset-0 rounded-card"
-                  tabIndex={-1}
-                  aria-hidden="true"
-                />
-              </div>
-            </li>
-          ))}
-        </ul>
-
-        <p className="flex items-start gap-2.5 rounded-card border border-dashed border-[var(--line-strong)] p-5 text-[0.8125rem] leading-relaxed text-[var(--muted)]">
-          <MapPin size={14} className="mt-0.5 shrink-0 text-[var(--gold)]" aria-hidden="true" />
-          <span>
-            This diagram shows relative areas of Hajipur, not exact addresses. For turn-by-turn
-            navigation, use the Google Maps link on any listing.
-          </span>
-        </p>
+        <div className="rounded-card border border-dashed border-[var(--line-strong)] bg-[rgba(247,243,235,0.02)] p-5">
+          <p className="text-[0.8125rem] leading-relaxed text-[var(--muted)]">
+            Looking for something else?{' '}
+            <Link
+              href="/menu"
+              className="text-[var(--gold)] underline underline-offset-4"
+            >
+              See what we cook
+            </Link>{' '}
+            or{' '}
+            <Link
+              href="/contact"
+              className="text-[var(--gold)] underline underline-offset-4"
+            >
+              get in touch
+            </Link>
+            .
+          </p>
+        </div>
       </div>
     </div>
   );

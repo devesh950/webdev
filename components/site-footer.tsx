@@ -1,10 +1,12 @@
-import { ArrowUpRight, Mail, MapPin } from 'lucide-react';
+import { ArrowUpRight, Clock3, Mail, MapPin } from 'lucide-react';
 import Link from 'next/link';
 
+import { restaurant } from '@/data/restaurant';
 import { siteConfig } from '@/lib/site';
 
 export function SiteFooter() {
   const email = siteConfig.enquiryEmail;
+  const year = new Date().getFullYear();
 
   return (
     <footer className="relative border-t border-[var(--line)] bg-[var(--charcoal-deep)]">
@@ -23,43 +25,41 @@ export function SiteFooter() {
                 </svg>
               </span>
               <span className="flex flex-col leading-none">
-                <span className="font-display text-[1.15rem] text-ivory">Hajipur Food</span>
-                <span className="mt-1 text-[0.56rem] uppercase tracking-[0.34em] text-[var(--gold)]">
-                  {siteConfig.location.label}
+                <span className="font-display text-[1.15rem] text-ivory">The Taj</span>
+                <span className="mt-1 text-[0.56rem] uppercase tracking-[0.3em] text-[var(--gold)]">
+                  Multicuisine Restaurant
                 </span>
               </span>
             </Link>
 
             <p className="mt-6 max-w-[34ch] font-display text-[1.35rem] italic leading-snug text-[var(--gold-soft)]">
-              {siteConfig.tagline}
-            </p>
-            <p className="mt-4 max-w-[40ch] text-[0.875rem] leading-relaxed text-[var(--muted)]">
-              {siteConfig.supportingTagline}
+              {restaurant.summary}
             </p>
 
-            <div className="mt-7 flex flex-col gap-3 text-[0.875rem] text-[var(--muted)]">
-              <p className="flex items-center gap-2.5">
-                <MapPin size={15} className="shrink-0 text-[var(--gold)]" aria-hidden="true" />
-                <span>{siteConfig.location.label}, {siteConfig.location.country}</span>
-              </p>
+            <ul className="mt-8 flex flex-col gap-3 text-[0.875rem] text-[var(--muted)]">
+              <li className="flex items-start gap-2.5">
+                <MapPin size={15} className="mt-0.5 shrink-0 text-[var(--gold)]" aria-hidden="true" />
+                <span>
+                  {restaurant.address.locality}, {restaurant.address.region},{' '}
+                  {restaurant.address.country}
+                </span>
+              </li>
+              <li className="flex items-start gap-2.5">
+                <Clock3 size={15} className="mt-0.5 shrink-0 text-[var(--gold)]" aria-hidden="true" />
+                <span>Opening hours — {restaurant.pendingNote.toLowerCase()}</span>
+              </li>
               {email ? (
-                <a
-                  href={`mailto:${email}`}
-                  className="flex w-fit items-center gap-2.5 transition-colors duration-300 hover:text-[var(--gold)]"
-                >
-                  <Mail size={15} className="shrink-0 text-[var(--gold)]" aria-hidden="true" />
-                  <span>{email}</span>
-                </a>
-              ) : (
-                <Link
-                  href="/partner"
-                  className="flex w-fit items-center gap-2.5 transition-colors duration-300 hover:text-[var(--gold)]"
-                >
-                  <Mail size={15} className="shrink-0 text-[var(--gold)]" aria-hidden="true" />
-                  <span>Send a website enquiry</span>
-                </Link>
-              )}
-            </div>
+                <li className="flex items-start gap-2.5">
+                  <Mail size={15} className="mt-0.5 shrink-0 text-[var(--gold)]" aria-hidden="true" />
+                  <a
+                    href={`mailto:${email}`}
+                    className="transition-colors duration-300 hover:text-[var(--gold)]"
+                  >
+                    {email}
+                  </a>
+                </li>
+              ) : null}
+            </ul>
           </div>
 
           {/* Navigation */}
@@ -70,21 +70,31 @@ export function SiteFooter() {
                   {column.title}
                 </h2>
                 <ul className="mt-5 flex flex-col gap-3">
-                  {column.links.map((link) => (
-                    <li key={link.href + link.label}>
-                      <Link
-                        href={link.href}
-                        className="group inline-flex items-center gap-1 text-[0.875rem] text-[var(--muted)] transition-colors duration-300 hover:text-ivory"
-                      >
-                        {link.label}
-                        <ArrowUpRight
-                          size={13}
-                          className="opacity-0 transition-opacity duration-300 group-hover:opacity-100"
-                          aria-hidden="true"
-                        />
-                      </Link>
-                    </li>
-                  ))}
+                  {column.links.map((link) => {
+                    const external = 'external' in link && link.external;
+                    const classes =
+                      'group inline-flex items-center gap-1 text-[0.875rem] text-[var(--muted)] transition-colors duration-300 hover:text-ivory';
+
+                    return (
+                      <li key={link.href + link.label}>
+                        {external ? (
+                          <a
+                            href={link.href}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className={classes}
+                          >
+                            {link.label}
+                            <ArrowUpRight size={13} className="opacity-60" aria-hidden="true" />
+                          </a>
+                        ) : (
+                          <Link href={link.href} className={classes}>
+                            {link.label}
+                          </Link>
+                        )}
+                      </li>
+                    );
+                  })}
                 </ul>
               </nav>
             ))}
@@ -95,20 +105,25 @@ export function SiteFooter() {
 
         <div className="flex flex-col gap-5 text-[0.75rem] text-[var(--muted-dim)] md:flex-row md:items-center md:justify-between">
           <p>
-            © {new Date().getFullYear()} {siteConfig.name}. All rights reserved.
+            © {year} {restaurant.name}. All rights reserved.
           </p>
-          <p className="max-w-[60ch] leading-relaxed">
-            Restaurant photography on this site is illustrative stock imagery and is not a
-            photograph of the restaurant shown. Details are published where verified and
-            labelled where not.
+          <p className="max-w-[62ch] leading-relaxed">
+            Photography on this site is illustrative stock imagery and is not a photograph of
+            this restaurant. Menu, opening hours and contact details are published once
+            confirmed directly by the restaurant.
           </p>
           <div className="flex items-center gap-5">
             <Link href="/privacy" className="transition-colors duration-300 hover:text-ivory">
               Privacy Policy
             </Link>
-            <Link href="/partner" className="transition-colors duration-300 hover:text-ivory">
-              Build My Restaurant Website
-            </Link>
+            <a
+              href={restaurant.googleMaps.listingUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="transition-colors duration-300 hover:text-ivory"
+            >
+              Google Maps
+            </a>
           </div>
         </div>
       </div>

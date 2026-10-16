@@ -1,9 +1,10 @@
 import { ImageResponse } from 'next/og';
 
+import { restaurant } from '@/data/restaurant';
 import { siteConfig } from '@/lib/site';
 
 export const runtime = 'edge';
-export const alt = `${siteConfig.name} — ${siteConfig.tagline}`;
+export const alt = `${restaurant.name} — ${restaurant.category}`;
 export const size = { width: 1200, height: 630 };
 export const contentType = 'image/png';
 
@@ -11,7 +12,7 @@ export const contentType = 'image/png';
  * Generated Open Graph card.
  *
  * Rendered rather than uploaded so it stays in step with the brand, and because
- * it never needs to be mistaken for a photograph of a restaurant.
+ * it never needs to be mistaken for a photograph of the restaurant.
  */
 export default async function OpenGraphImage() {
   return new ImageResponse(
@@ -41,36 +42,35 @@ export default async function OpenGraphImage() {
             }}
           />
           <div style={{ display: 'flex', flexDirection: 'column' }}>
-            <div style={{ fontSize: 26, letterSpacing: '0.01em' }}>Hajipur Food</div>
+            <div style={{ fontSize: 28, letterSpacing: '0.01em' }}>The Taj</div>
             <div
               style={{
                 fontSize: 13,
                 letterSpacing: '0.3em',
                 color: '#C8A96B',
-                marginTop: 6,
+                marginTop: 8,
                 fontFamily: 'sans-serif',
               }}
             >
-              {siteConfig.location.label.toUpperCase()}
+              MULTICUISINE RESTAURANT
             </div>
           </div>
         </div>
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
-          <div style={{ fontSize: 76, lineHeight: 1.04, letterSpacing: '-0.02em' }}>
-            Good Food. Great Stories. Hajipur.
+          <div style={{ fontSize: 70, lineHeight: 1.06, letterSpacing: '-0.02em' }}>
+            Family meals, memorable evenings.
           </div>
           <div
             style={{
               fontSize: 26,
               color: '#A8A39B',
-              maxWidth: 820,
+              maxWidth: 840,
               fontFamily: 'sans-serif',
               lineHeight: 1.45,
             }}
           >
-            Discover the local restaurants, memorable meals and flavours that bring Hajipur
-            together.
+            {restaurant.summary}
           </div>
         </div>
 
@@ -87,8 +87,8 @@ export default async function OpenGraphImage() {
             letterSpacing: '0.16em',
           }}
         >
-          <span>{siteConfig.tagline.toUpperCase()}</span>
-          <span style={{ color: '#A8A39B' }}>RESTAURANT WEBSITE SERVICES</span>
+          <span>{siteConfig.location.label.toUpperCase()}</span>
+          <span style={{ color: '#A8A39B' }}>NORTH INDIAN · MUGHLAI</span>
         </div>
       </div>
     ),

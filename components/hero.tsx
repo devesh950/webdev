@@ -1,18 +1,19 @@
 'use client';
 
 import { motion, useReducedMotion, useScroll, useTransform } from 'framer-motion';
-import { ArrowDown, ArrowRight, Sparkles } from 'lucide-react';
+import { ArrowDown, ArrowRight, MapPin } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRef } from 'react';
 
+import { restaurant } from '@/data/restaurant';
 import { foodPhotos } from '@/lib/images';
 import { siteConfig } from '@/lib/site';
 
 const headline = [
-  { text: 'Good Food.', accent: false },
-  { text: 'Great Stories.', accent: false },
-  { text: 'Hajipur.', accent: true },
+  { text: 'Family meals,', accent: false },
+  { text: 'memorable', accent: true },
+  { text: 'evenings.', accent: false },
 ];
 
 /**
@@ -50,7 +51,7 @@ export function Hero() {
         className="absolute inset-0 -z-20"
       >
         <Image
-          src={foodPhotos.currySpread}
+          src={foodPhotos.diningHall}
           alt=""
           fill
           priority
@@ -79,7 +80,6 @@ export function Hero() {
         style={reduceMotion ? undefined : { y: copyY, opacity: fade }}
         className="shell-wide relative"
       >
-        {/* Location label */}
         <p
           className="anim-fade-up flex items-center gap-3 text-[0.6875rem] uppercase tracking-[0.34em] text-[var(--gold)]"
           style={{ animationDelay: '150ms' }}
@@ -88,7 +88,6 @@ export function Hero() {
           {siteConfig.location.label}, India
         </p>
 
-        {/* Headline */}
         <h1 className="mt-7 max-w-[16ch] text-display-xl text-ivory">
           {headline.map((line, index) => (
             <span key={line.text} className="block overflow-hidden pb-[0.06em]">
@@ -106,37 +105,38 @@ export function Hero() {
           ))}
         </h1>
 
-        {/* Supporting copy */}
         <p
           className="anim-fade-up mt-8 max-w-[52ch] text-[1.0625rem] leading-relaxed text-[var(--muted)] sm:text-[1.125rem]"
           style={{ animationDelay: '620ms' }}
         >
-          Discover the local restaurants, memorable meals, and flavours that bring Hajipur
-          together.
+          {restaurant.category} in {siteConfig.location.label}. {restaurant.summary}
         </p>
 
-        {/* CTAs */}
         <div
           className="anim-fade-up mt-10 flex flex-col gap-3 sm:flex-row sm:items-center"
           style={{ animationDelay: '750ms' }}
         >
-          <Link href="/restaurants" className="btn btn-primary group">
-            Explore Restaurants
+          <Link href="/menu" className="btn btn-primary group">
+            Explore the Menu
             <ArrowRight
               size={16}
               aria-hidden="true"
               className="transition-transform duration-500 ease-editorial group-hover:translate-x-1"
             />
           </Link>
-          <Link href="/partner" className="btn btn-ghost group">
-            <Sparkles size={15} aria-hidden="true" className="text-[var(--gold)]" />
-            Partner With Us
-          </Link>
+          <a
+            href={restaurant.googleMaps.directionsUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="btn btn-ghost group"
+          >
+            <MapPin size={15} aria-hidden="true" className="text-[var(--gold)]" />
+            Get Directions
+          </a>
         </div>
 
-        {/* Scroll indicator */}
         <a
-          href="#featured"
+          href="#welcome"
           className="anim-fade-up mt-14 hidden items-center gap-3 text-[0.6875rem] uppercase tracking-[0.26em] text-[var(--muted-dim)] transition-colors duration-300 hover:text-[var(--gold)] sm:inline-flex"
           style={{ animationDelay: '1100ms' }}
         >

@@ -1,24 +1,27 @@
 /**
  * Central site configuration.
  *
- * Anything that a business owner may want to change lives here so that
- * content edits never require touching presentation code.
+ * Anything a restaurant owner may want to change lives here so that content
+ * edits never require touching presentation code.
  */
+
+import { restaurant } from '@/data/restaurant';
 
 function envUrl(): string {
   const raw = process.env.NEXT_PUBLIC_SITE_URL?.trim();
   if (raw) return raw.replace(/\/+$/, '');
   if (process.env.NODE_ENV === 'production') {
     // Keep production URLs absolute so canonical tags and OG tags stay valid.
-    return 'https://hajipur-food.vercel.app';
+    return 'https://the-taj-hajipur.vercel.app';
   }
   return 'http://localhost:3000';
 }
 
 /**
  * Public-facing enquiry address. Configure with `NEXT_PUBLIC_ENQUIRY_EMAIL`.
- * While it is unset we deliberately fall back to the in-site enquiry form
- * rather than displaying a contact address that nobody monitors.
+ * While it is unset we deliberately fall back to routing visitors to the
+ * restaurant's Google Maps listing rather than showing an address nobody
+ * monitors.
  */
 function enquiryEmail(): string | null {
   const value = process.env.NEXT_PUBLIC_ENQUIRY_EMAIL?.trim();
@@ -27,58 +30,54 @@ function enquiryEmail(): string | null {
 }
 
 export const siteConfig = {
-  name: 'Hajipur Food',
-  shortName: 'Hajipur Food',
-  tagline: 'Discover the Flavours of Hajipur.',
-  supportingTagline:
-    'Local favourites. Memorable flavours. Exceptional experiences.',
-  description:
-    'A premium local food discovery platform for Hajipur, Bihar — explore restaurants, cuisines and memorable meals, and discover how professional websites help local restaurants grow.',
+  name: restaurant.name,
+  shortName: 'The Taj',
+  tagline: restaurant.summary,
+  description: `${restaurant.name} is an inviting choice for family meals, group dining and special occasions in ${restaurant.address.city}, ${restaurant.address.region} — serving North Indian and Mughlai cuisine.`,
   url: envUrl(),
   locale: 'en_IN',
   location: {
-    city: 'Hajipur',
-    region: 'Bihar',
+    city: restaurant.address.city,
+    region: restaurant.address.region,
     regionCode: 'BR',
-    country: 'India',
+    country: restaurant.address.country,
     countryCode: 'IN',
-    label: 'Hajipur, Bihar',
+    label: `${restaurant.address.city}, ${restaurant.address.region}`,
   },
   enquiryEmail: enquiryEmail(),
-  social: [] as { label: string; href: string }[],
   primaryNav: [
-    { label: 'Restaurants', href: '/restaurants' },
-    { label: 'Cuisines', href: '/restaurants#cuisines' },
-    { label: 'Map', href: '/map' },
-    { label: 'Services', href: '/services' },
+    { label: 'Home', href: '/' },
+    { label: 'About', href: '/about' },
+    { label: 'Menu', href: '/menu' },
+    { label: 'Gallery', href: '/gallery' },
+    { label: 'Location', href: '/location' },
+    { label: 'Contact', href: '/contact' },
   ],
   footerNav: [
     {
-      title: 'Discover',
+      title: 'The Restaurant',
       links: [
-        { label: 'All Restaurants', href: '/restaurants' },
-        { label: 'Family Dining', href: '/restaurants?category=Family%20Dining' },
-        { label: 'Biryani', href: '/restaurants?category=Biryani' },
-        { label: 'Vegetarian', href: '/restaurants?category=Vegetarian' },
-        { label: 'Quick Bites', href: '/restaurants?category=Quick%20Bites' },
+        { label: 'Home', href: '/' },
+        { label: 'About', href: '/about' },
+        { label: 'Menu', href: '/menu' },
+        { label: 'Gallery', href: '/gallery' },
       ],
     },
     {
-      title: 'For Restaurants',
+      title: 'Visit Us',
       links: [
-        { label: 'Website Services', href: '/services' },
-        { label: 'Request a Consultation', href: '/partner' },
-        { label: 'Free Consultation', href: '/partner#consultation' },
-        { label: 'Service enquiry', href: '/partner' },
+        { label: 'Location', href: '/location' },
+        { label: 'Get Directions', href: restaurant.googleMaps.directionsUrl, external: true },
+        { label: 'Contact', href: '/contact' },
       ],
     },
     {
-      title: 'Company',
+      title: 'Information',
       links: [
-        { label: 'About Hajipur Food', href: '/about' },
+        { label: 'Cuisine', href: '/about#cuisine' },
+        { label: 'Known For', href: '/menu' },
         { label: 'Privacy Policy', href: '/privacy' },
-        { label: 'Map', href: '/map' },
-        { label: 'Partner With Us', href: '/partner' },
+        { label: 'Google Maps listing', href: restaurant.googleMaps.listingUrl, external: true },
       ],
     },
   ],
