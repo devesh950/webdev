@@ -1,0 +1,20 @@
+node_modules
+.next
+out
+build
+prototype
+.data
+.next-env.d.ts
+*.tsbuildinfo
+.data
+
+# local audit tooling + captured screenshots
+audit.mjs
+check-hydration.mjs
+check-nojs.mjs
+shots.mjs
+verify.mjs
+.shots
+receiver.cjs
+webhook-received.jsonl
+nojs-check.png

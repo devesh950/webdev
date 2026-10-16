@@ -1,0 +1,613 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ============================================================
+   DESIGN TOKENS
+   ============================================================ */
+:root {
+  --charcoal: #101010;
+  --charcoal-deep: #0a0a09;
+  --ivory: #f7f3eb;
+  --gold: #c8a96b;
+  --gold-soft: #e3ce9f;
+  --gold-deep: #a98a4e;
+  --bronze: #8b6b3f;
+  --white: #ffffff;
+  --muted: #a8a39b;
+  --muted-dim: #7d7871;
+
+  --surface: #161614;
+  --surface-raised: #1d1d1a;
+  --surface-sunken: #0b0b0a;
+
+  --line: rgba(247, 243, 235, 0.1);
+  --line-strong: rgba(247, 243, 235, 0.2);
+
+  --shadow-cinematic: 0 40px 90px -40px rgba(0, 0, 0, 0.95);
+
+  --nav-height: 76px;
+  --gutter: clamp(1.25rem, 5vw, 4rem);
+}
+
+@layer base {
+  *,
+  *::before,
+  *::after {
+    border-color: var(--line);
+  }
+
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: calc(var(--nav-height) + 1.5rem);
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    background-color: var(--charcoal);
+    color: var(--ivory);
+    font-family: var(--font-sans), system-ui, -apple-system, 'Segoe UI', sans-serif;
+    font-weight: 300;
+    font-size: 1rem;
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-display), Georgia, 'Times New Roman', serif;
+    font-weight: 400;
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  /* Visible, on-brand focus for keyboard users everywhere. */
+  :focus-visible {
+    outline: 2px solid var(--gold);
+    outline-offset: 3px;
+    border-radius: 3px;
+  }
+
+  ::selection {
+    background: var(--gold);
+    color: var(--charcoal);
+  }
+
+  img {
+    max-width: 100%;
+    height: auto;
+  }
+
+  /* Firefox scrollbar + a quieter WebKit one. */
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(200, 169, 107, 0.4) transparent;
+  }
+
+  *::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+
+  *::-webkit-scrollbar-thumb {
+    background: rgba(200, 169, 107, 0.32);
+    border-radius: 999px;
+  }
+
+  *::-webkit-scrollbar-track {
+    background: transparent;
+  }
+}
+
+/* ============================================================
+   COMPONENT PRIMITIVES
+   ============================================================ */
+@layer components {
+  .shell {
+    width: 100%;
+    max-width: 78rem;
+    margin-inline: auto;
+    padding-inline: var(--gutter);
+  }
+
+  .shell-wide {
+    width: 100%;
+    max-width: 90rem;
+    margin-inline: auto;
+    padding-inline: var(--gutter);
+  }
+
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.65rem;
+    font-size: 0.6875rem;
+    letter-spacing: 0.26em;
+    text-transform: uppercase;
+    color: var(--gold);
+    font-weight: 500;
+  }
+
+  .eyebrow::before {
+    content: '';
+    width: 1.75rem;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--gold));
+  }
+
+  .prose-body {
+    color: var(--muted);
+    font-size: 1.0625rem;
+    line-height: 1.8;
+  }
+
+  /* Buttons ------------------------------------------------------------- */
+  .btn {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6rem;
+    min-height: 48px;
+    padding: 0.85rem 1.6rem;
+    border-radius: 999px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    letter-spacing: 0.01em;
+    line-height: 1;
+    cursor: pointer;
+    transition:
+      transform 0.45s cubic-bezier(0.22, 1, 0.36, 1),
+      background-color 0.35s ease,
+      border-color 0.35s ease,
+      color 0.35s ease,
+      box-shadow 0.45s ease;
+  }
+
+  .btn:active {
+    transform: translateY(0) scale(0.985);
+  }
+
+  .btn-primary {
+    background: linear-gradient(140deg, var(--gold-soft), var(--gold) 55%, var(--gold-deep));
+    color: #14100a;
+    box-shadow: 0 16px 40px -20px rgba(200, 169, 107, 0.75);
+  }
+
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 26px 56px -22px rgba(200, 169, 107, 0.85);
+  }
+
+  .btn-ghost {
+    border: 1px solid var(--line-strong);
+    color: var(--ivory);
+    background: transparent;
+  }
+
+  .btn-ghost:hover {
+    border-color: var(--gold);
+    color: var(--gold);
+    transform: translateY(-2px);
+  }
+
+  .btn-quiet {
+    color: var(--muted);
+    padding-inline: 0.25rem;
+    min-height: 40px;
+  }
+
+  .btn-quiet:hover {
+    color: var(--gold);
+  }
+
+  .btn[disabled],
+  .btn[aria-disabled='true'] {
+    opacity: 0.55;
+    cursor: not-allowed;
+    transform: none;
+  }
+
+  /* Surfaces ------------------------------------------------------------ */
+  .surface-card {
+    background: linear-gradient(170deg, var(--surface-raised), var(--surface));
+    border: 1px solid var(--line);
+    border-radius: 1.5rem;
+  }
+
+  .hairline {
+    height: 1px;
+    border: 0;
+    background: linear-gradient(90deg, transparent, var(--line-strong), transparent);
+  }
+
+  /* Film grain ---------------------------------------------------------- */
+  .grain-overlay {
+    position: fixed;
+    inset: -50%;
+    z-index: 60;
+    pointer-events: none;
+    opacity: 0.035;
+    mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    animation: grain-shift 8s steps(5) infinite;
+  }
+
+  /* Atmosphere ---------------------------------------------------------- */
+  .atmosphere::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background:
+      radial-gradient(50rem 40rem at 88% -10%, rgba(200, 169, 107, 0.14), transparent 62%),
+      radial-gradient(44rem 34rem at 4% 18%, rgba(139, 107, 63, 0.12), transparent 60%);
+  }
+
+  .image-veil {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      180deg,
+      rgba(10, 10, 9, 0.35) 0%,
+      rgba(10, 10, 9, 0.15) 35%,
+      rgba(16, 16, 16, 0.92) 100%
+    );
+  }
+
+  /* Imagery credit ------------------------------------------------------ */
+  .credit-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.3rem 0.6rem;
+    border-radius: 999px;
+    background: rgba(10, 10, 9, 0.62);
+    border: 1px solid var(--line);
+    color: var(--muted-dim);
+    font-size: 0.625rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+  }
+
+  /* Form fields --------------------------------------------------------- */
+  .field-label {
+    display: block;
+    font-size: 0.75rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--muted);
+    font-weight: 500;
+    margin-bottom: 0.6rem;
+  }
+
+  .field-input {
+    width: 100%;
+    min-height: 50px;
+    padding: 0.8rem 1rem;
+    background: rgba(247, 243, 235, 0.035);
+    border: 1px solid var(--line);
+    border-radius: 0.85rem;
+    color: var(--ivory);
+    font-size: 1rem;
+    font-family: inherit;
+    font-weight: 300;
+    transition:
+      border-color 0.3s ease,
+      background-color 0.3s ease,
+      box-shadow 0.3s ease;
+  }
+
+  .field-input::placeholder {
+    color: rgba(168, 163, 155, 0.55);
+  }
+
+  .field-input:hover:not(:disabled) {
+    border-color: var(--line-strong);
+  }
+
+  .field-input:focus {
+    outline: none;
+    border-color: var(--gold);
+    background: rgba(247, 243, 235, 0.05);
+    box-shadow: 0 0 0 3px rgba(200, 169, 107, 0.16);
+  }
+
+  .field-input[aria-invalid='true'] {
+    border-color: #d4705a;
+    box-shadow: 0 0 0 3px rgba(212, 112, 90, 0.14);
+  }
+
+  .field-input:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+
+  textarea.field-input {
+    min-height: 130px;
+    resize: vertical;
+    line-height: 1.6;
+  }
+
+  select.field-input {
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23a8a39b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 1rem center;
+    padding-right: 2.75rem;
+  }
+
+  select.field-input option {
+    background: var(--surface-raised);
+    color: var(--ivory);
+  }
+
+  /* Choice chips (filters + checkboxes) ---------------------------------- */
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    min-height: 42px;
+    padding: 0.55rem 1.05rem;
+    border-radius: 999px;
+    border: 1px solid var(--line);
+    background: rgba(247, 243, 235, 0.03);
+    color: var(--muted);
+    font-size: 0.8125rem;
+    letter-spacing: 0.01em;
+    cursor: pointer;
+    white-space: nowrap;
+    transition:
+      color 0.3s ease,
+      border-color 0.3s ease,
+      background-color 0.3s ease,
+      transform 0.3s ease;
+  }
+
+  .chip:hover {
+    color: var(--ivory);
+    border-color: var(--line-strong);
+  }
+
+  .chip[data-selected='true'],
+  .chip[aria-pressed='true'] {
+    background: linear-gradient(140deg, var(--gold-soft), var(--gold));
+    border-color: transparent;
+    color: #14100a;
+    font-weight: 500;
+  }
+
+  /* Tags ---------------------------------------------------------------- */
+  .tag {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.3rem 0.7rem;
+    border-radius: 999px;
+    border: 1px solid var(--line);
+    color: var(--muted);
+    font-size: 0.6875rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .tag-gold {
+    border-color: rgba(200, 169, 107, 0.42);
+    color: var(--gold);
+    background: rgba(200, 169, 107, 0.08);
+  }
+
+  .tag-muted {
+    color: var(--muted-dim);
+  }
+
+  /* Section rhythm ------------------------------------------------------ */
+  .section {
+    position: relative;
+    padding-block: clamp(4.5rem, 10vw, 8.5rem);
+  }
+
+  .section-tight {
+    padding-block: clamp(3rem, 7vw, 5.5rem);
+  }
+
+  .section-alt {
+    background:
+      linear-gradient(180deg, transparent, rgba(247, 243, 235, 0.022) 15%, rgba(247, 243, 235, 0.022) 85%, transparent);
+    border-block: 1px solid var(--line);
+  }
+
+  /* Link underline ------------------------------------------------------ */
+  .link-underline {
+    position: relative;
+    color: var(--ivory);
+    text-decoration: none;
+  }
+
+  .link-underline::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: -3px;
+    height: 1px;
+    width: 100%;
+    background: currentColor;
+    transform: scaleX(0);
+    transform-origin: right;
+    transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .link-underline:hover::after {
+    transform: scaleX(1);
+    transform-origin: left;
+  }
+
+  /* Above-the-fold entrances --------------------------------------------
+     These run in CSS rather than JavaScript for one reason: if the bundle is
+     slow, blocked or fails, the hero must still be readable. `both` fill holds
+     the start state during the delay and the end state afterwards — and if the
+     animation never runs at all the element shows its natural, visible style. */
+  @keyframes hf-rise {
+    from {
+      transform: translateY(112%);
+    }
+    to {
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes hf-fade-up {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  .anim-rise {
+    animation: hf-rise 1.05s cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+
+  .anim-fade-up {
+    animation: hf-fade-up 0.85s cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+
+  /* Below-the-fold reveals are framer-motion driven, which means they are
+     rendered with inline `opacity:0`. When scripting is unavailable the
+     animation never runs, so restore the final state here.
+
+     `@media (scripting: none)` needs no JavaScript and — unlike the old
+     `no-js` class hack — does not mutate the DOM before React hydrates.
+     A matching <noscript> rule in layout.tsx covers legacy browsers. */
+  @media (scripting: none) {
+    .reveal-motion {
+      opacity: 1 !important;
+      transform: none !important;
+    }
+  }
+
+  /* Screen-reader only -------------------------------------------------- */
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+  }
+
+  .skip-link {
+    position: absolute;
+    left: 50%;
+    top: 0.5rem;
+    transform: translate(-50%, -200%);
+    z-index: 100;
+    padding: 0.75rem 1.25rem;
+    background: var(--gold);
+    color: #14100a;
+    border-radius: 999px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    transition: transform 0.3s ease;
+  }
+
+  .skip-link:focus {
+    transform: translate(-50%, 0);
+  }
+}
+
+/* ============================================================
+   UTILITIES
+   ============================================================ */
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .gold-gradient-text {
+    background: linear-gradient(100deg, var(--gold-soft) 0%, var(--gold) 45%, var(--bronze) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .hairline-t {
+    border-top: 1px solid var(--line);
+  }
+
+  .hairline-b {
+    border-bottom: 1px solid var(--line);
+  }
+
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  /* Horizontal chip rails scroll on small screens without page overflow. */
+  .rail {
+    display: flex;
+    gap: 0.6rem;
+    overflow-x: auto;
+    padding-bottom: 0.25rem;
+    scrollbar-width: none;
+  }
+
+  .rail::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/* ============================================================
+   MOTION PREFERENCES
+   ============================================================ */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .grain-overlay {
+    animation: none;
+  }
+}
+
+@media print {
+  .grain-overlay,
+  .no-print {
+    display: none !important;
+  }
+
+  body {
+    background: #fff;
+    color: #000;
+  }
+}
