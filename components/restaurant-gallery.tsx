@@ -105,7 +105,7 @@ export function RestaurantGallery({ images }: { images: PhotoAsset[] }) {
               type="button"
               onClick={close}
               aria-label="Close image viewer"
-              className="absolute right-4 top-4 z-10 grid h-11 w-11 place-items-center rounded-full border border-[var(--line-strong)] text-ivory transition-colors duration-300 hover:border-[var(--gold)] hover:text-[var(--gold)]"
+              className="absolute right-4 top-4 z-10 grid h-11 w-11 place-items-center rounded-full border border-white/30 bg-black/60 text-white transition-colors duration-300 hover:border-amber-400 hover:text-amber-400 backdrop-blur-md"
             >
               <X size={18} />
             </button>
@@ -117,7 +117,7 @@ export function RestaurantGallery({ images }: { images: PhotoAsset[] }) {
               onClick={(event) => event.stopPropagation()}
               className="relative w-full max-w-5xl"
             >
-              <span className="relative block aspect-[16/10] w-full overflow-hidden rounded-card">
+              <span className="relative block aspect-[16/10] w-full overflow-hidden rounded-card shadow-2xl">
                 <Image
                   src={active.src}
                   alt={active.alt}
@@ -128,8 +128,8 @@ export function RestaurantGallery({ images }: { images: PhotoAsset[] }) {
                 />
               </span>
               <figcaption className="mt-4 flex flex-col gap-1 text-center">
-                <p className="text-[0.875rem] text-[var(--muted)]">{active.alt}</p>
-                <p className="text-[0.75rem] text-[var(--muted-dim)]">
+                <p className="text-base font-medium text-white">{active.alt}</p>
+                <p className="text-xs text-stone-300">
                   {active.credit} · {(index ?? 0) + 1} of {images.length}
                 </p>
               </figcaption>
@@ -144,7 +144,7 @@ export function RestaurantGallery({ images }: { images: PhotoAsset[] }) {
                     previous();
                   }}
                   aria-label="Previous image"
-                  className="absolute left-3 top-1/2 grid h-12 w-12 -translate-y-1/2 place-items-center rounded-full border border-[var(--line-strong)] bg-[rgba(16,16,16,0.7)] text-ivory transition-colors duration-300 hover:border-[var(--gold)] hover:text-[var(--gold)] sm:left-6"
+                  className="absolute left-3 top-1/2 grid h-12 w-12 -translate-y-1/2 place-items-center rounded-full border border-white/30 bg-black/70 text-white transition-colors duration-300 hover:border-amber-400 hover:text-amber-400 sm:left-6 backdrop-blur-md"
                 >
                   <ChevronLeft size={20} />
                 </button>
@@ -155,7 +155,7 @@ export function RestaurantGallery({ images }: { images: PhotoAsset[] }) {
                     next();
                   }}
                   aria-label="Next image"
-                  className="absolute right-3 top-1/2 grid h-12 w-12 -translate-y-1/2 place-items-center rounded-full border border-[var(--line-strong)] bg-[rgba(16,16,16,0.7)] text-ivory transition-colors duration-300 hover:border-[var(--gold)] hover:text-[var(--gold)] sm:right-6"
+                  className="absolute right-3 top-1/2 grid h-12 w-12 -translate-y-1/2 place-items-center rounded-full border border-white/30 bg-black/70 text-white transition-colors duration-300 hover:border-amber-400 hover:text-amber-400 sm:right-6 backdrop-blur-md"
                 >
                   <ChevronRight size={20} />
                 </button>

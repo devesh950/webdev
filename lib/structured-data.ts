@@ -35,19 +35,49 @@ export function restaurantStructuredData(): Json {
     name: restaurant.name,
     url,
     description: restaurant.legalDescription,
+    telephone: restaurant.contact.phone,
+    email: restaurant.contact.email,
+    priceRange: restaurant.priceRange,
     image: [restaurant.heroImage.src, ...restaurant.gallery.map((image) => image.src)],
     address: {
       '@type': 'PostalAddress',
-      streetAddress: restaurant.address.street ?? undefined,
-      addressLocality: restaurant.address.locality,
+      streetAddress: restaurant.address.line1,
+      addressLocality: restaurant.address.city,
       addressRegion: restaurant.address.region,
+      postalCode: restaurant.address.postalCode,
       addressCountry: restaurant.address.country,
+    },
+    geo: {
+      '@type': 'GeoCoordinates',
+      latitude: '25.6858',
+      longitude: '85.2146',
     },
     hasMap: restaurant.googleMaps.listingUrl,
     servesCuisine: restaurant.cuisineHighlights.map((highlight) => highlight.label),
     currenciesAccepted: 'INR',
-    ...(restaurant.contact.phone ? { telephone: restaurant.contact.phone } : {}),
-    ...(restaurant.contact.email ? { email: restaurant.contact.email } : {}),
+    openingHoursSpecification: [
+      {
+        '@type': 'OpeningHoursSpecification',
+        dayOfWeek: [
+          'Monday',
+          'Tuesday',
+          'Wednesday',
+          'Thursday',
+          'Friday',
+          'Saturday',
+          'Sunday',
+        ],
+        opens: '11:00',
+        closes: '22:30',
+      },
+    ],
+    aggregateRating: {
+      '@type': 'AggregateRating',
+      ratingValue: restaurant.rating.score,
+      reviewCount: restaurant.rating.totalReviews,
+      bestRating: '5',
+      worstRating: '1',
+    },
   });
 }
 

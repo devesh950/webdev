@@ -9,13 +9,13 @@ import { restaurant } from '@/data/restaurant';
  * next step is always obvious without the page feeling pushy.
  */
 export function CtaBand({
-  eyebrow = 'Visit us',
-  title = 'Pull up a chair.',
-  description = 'We are in Hajipur, Bihar. Get directions straight to our door — it is the fastest way to reach us while our own contact details are being confirmed.',
+  eyebrow = 'Reserve & Visit',
+  title = 'A table is waiting for your family.',
+  description = 'Centrally situated on Lower Dakbunglow Road above HDFC Bank in Hajipur. Join us for lunch, dinner or book in advance for celebrations.',
   primaryLabel = 'Get Directions',
   primaryHref = restaurant.googleMaps.directionsUrl,
-  secondaryLabel = 'Find Us',
-  secondaryHref = '/location',
+  secondaryLabel = 'Contact & Timings',
+  secondaryHref = '/contact',
 }: {
   eyebrow?: string;
   title?: string;
@@ -78,8 +78,7 @@ export function CtaBand({
           </div>
 
           <p className="mt-7 text-[0.8125rem] text-[var(--muted-dim)]">
-            {restaurant.address.locality}, {restaurant.address.region} ·{' '}
-            {restaurant.address.country}
+            {restaurant.address.fullFormatted} · Helpline: {restaurant.contact.phoneFormatted}
           </p>
         </Reveal>
       </div>

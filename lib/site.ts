@@ -32,10 +32,12 @@ function enquiryEmail(): string | null {
 export const siteConfig = {
   name: restaurant.name,
   shortName: 'The Taj',
-  tagline: restaurant.summary,
-  description: `${restaurant.name} is an inviting choice for family meals, group dining and special occasions in ${restaurant.address.city}, ${restaurant.address.region} — serving North Indian and Mughlai cuisine.`,
+  tagline: restaurant.tagline,
+  description: `${restaurant.name} is Hajipur’s premier destination for family dining, royal dum biryani, sizzling tandoor, and authentic multicuisine feasts on Lower Dakbunglow Road, Bihar.`,
   url: envUrl(),
   locale: 'en_IN',
+  phone: restaurant.contact.phoneFormatted,
+  address: restaurant.address.fullFormatted,
   location: {
     city: restaurant.address.city,
     region: restaurant.address.region,
@@ -44,7 +46,7 @@ export const siteConfig = {
     countryCode: 'IN',
     label: `${restaurant.address.city}, ${restaurant.address.region}`,
   },
-  enquiryEmail: enquiryEmail(),
+  enquiryEmail: enquiryEmail() ?? restaurant.contact.email,
   primaryNav: [
     { label: 'Home', href: '/' },
     { label: 'About', href: '/about' },

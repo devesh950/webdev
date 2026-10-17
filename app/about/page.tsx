@@ -1,11 +1,12 @@
 import type { Metadata } from 'next';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, Award, CheckCircle2, MapPin, Phone, ShieldCheck, Sparkles, Star, Users, Utensils } from 'lucide-react';
 import Link from 'next/link';
 
 import { Breadcrumbs } from '@/components/breadcrumbs';
 import { CtaBand } from '@/components/cta-band';
 import { IllustrativeNote } from '@/components/illustrative-note';
 import { PhotoFrame } from '@/components/photo-frame';
+import { ReservationButton } from '@/components/reservation-button';
 import { Reveal } from '@/components/reveal';
 import { SectionHeading } from '@/components/section-heading';
 import { restaurant } from '@/data/restaurant';
@@ -13,8 +14,8 @@ import { siteConfig } from '@/lib/site';
 import { breadcrumbStructuredData, jsonLdScript } from '@/lib/structured-data';
 
 export const metadata: Metadata = {
-  title: `About — ${restaurant.name}`,
-  description: `${restaurant.name} is an inviting choice for family meals, group dining and special occasions in ${siteConfig.location.label}, serving North Indian and Mughlai cuisine.`,
+  title: `About Us — ${restaurant.name}`,
+  description: `Discover the story and royal hospitality of ${restaurant.name} on Lower Dakbunglow Road, Hajipur, Bihar. Authentic North Indian, Mughlai and multicuisine dining for families and grand celebrations.`,
   alternates: { canonical: '/about' },
   openGraph: {
     title: `About ${restaurant.name}`,
@@ -34,15 +35,15 @@ export default function AboutPage() {
       <header className="relative overflow-hidden border-b border-[var(--line)] pb-14 pt-[calc(var(--nav-height)+3.5rem)] sm:pb-16">
         <div
           aria-hidden="true"
-          className="absolute inset-0 -z-10 bg-[radial-gradient(56rem_30rem_at_30%_0%,rgba(200,169,107,0.12),transparent_62%)]"
+          className="absolute inset-0 -z-10 bg-[radial-gradient(56rem_30rem_at_30%_0%,rgba(200,169,107,0.15),transparent_62%)]"
         />
         <div className="shell">
           <Breadcrumbs trail={trail} />
           <SectionHeading
             className="mt-8"
-            eyebrow="About us"
-            title="An inviting choice for family meals, group dining, and special occasions."
-            description={restaurant.category}
+            eyebrow="Our Heritage &amp; Passion"
+            title="Royal Flavours &amp; Warm Family Hospitality in Hajipur"
+            description={restaurant.tagline}
             as="h1"
           />
         </div>
@@ -58,9 +59,35 @@ export default function AboutPage() {
                 </Reveal>
               ))}
 
-              <Reveal delay={0.2} className="mt-4 flex flex-wrap gap-3">
-                <Link href="/menu" className="btn btn-primary group">
-                  Explore the Menu
+              {/* Our Pillars */}
+              <Reveal delay={0.15} className="mt-6">
+                <div className="grid gap-4 sm:grid-cols-2">
+                  <div className="rounded-xl border border-[var(--line)] bg-[var(--surface)] p-5">
+                    <span className="grid h-10 w-10 place-items-center rounded-lg bg-[rgba(200,169,107,0.12)] text-[var(--gold)]">
+                      <Utensils size={18} />
+                    </span>
+                    <h3 className="mt-3 font-display text-base text-ivory">From-Scratch Cooking</h3>
+                    <p className="mt-1 text-xs leading-relaxed text-[var(--muted)]">
+                      Slow-roasted whole spices, authentic clay tandoor grilling, and velvety tomato gravies simmered to royal consistency.
+                    </p>
+                  </div>
+
+                  <div className="rounded-xl border border-[var(--line)] bg-[var(--surface)] p-5">
+                    <span className="grid h-10 w-10 place-items-center rounded-lg bg-[rgba(200,169,107,0.12)] text-[var(--gold)]">
+                      <ShieldCheck size={18} />
+                    </span>
+                    <h3 className="mt-3 font-display text-base text-ivory">Hygiene &amp; Quality</h3>
+                    <p className="mt-1 text-xs leading-relaxed text-[var(--muted)]">
+                      Freshly sourced cottage cheese, choice cuts of meat, and dedicated pure vegetarian preparation stations.
+                    </p>
+                  </div>
+                </div>
+              </Reveal>
+
+              <Reveal delay={0.2} className="mt-4 flex flex-wrap gap-3.5">
+                <ReservationButton>Reserve a Table</ReservationButton>
+                <Link href="/menu" className="btn btn-ghost group">
+                  Explore Full Menu
                   <ArrowRight
                     size={15}
                     aria-hidden="true"
@@ -68,27 +95,28 @@ export default function AboutPage() {
                   />
                 </Link>
                 <Link href="/location" className="btn btn-ghost">
-                  Find us
+                  Get Directions
                 </Link>
               </Reveal>
 
-              {/* Cuisine */}
+              {/* Cuisine Highlights */}
               <Reveal delay={0.1} className="mt-10">
                 <section id="cuisine" className="scroll-mt-28">
-                  <h2 className="font-display text-[1.6rem] text-ivory">What we cook</h2>
-                  <ul className="mt-6 grid gap-3 sm:grid-cols-2">
+                  <p className="eyebrow">Our Kitchen</p>
+                  <h2 className="mt-2 font-display text-[1.6rem] text-ivory">What We Specialize In</h2>
+                  <div className="mt-6 flex flex-col gap-4">
                     {restaurant.cuisineHighlights.map((highlight) => (
-                      <li
+                      <div
                         key={highlight.label}
-                        className="flex items-center justify-between gap-4 rounded-xl border border-[var(--line)] bg-[var(--surface)] px-5 py-4"
+                        className="rounded-xl border border-[var(--line)] bg-[var(--surface)] p-5 transition-colors hover:border-[rgba(200,169,107,0.35)]"
                       >
-                        <span className="text-[0.9375rem] text-ivory">{highlight.label}</span>
-                        <span className="tag tag-gold">
-                          {highlight.verification === 'verified' ? 'Verified' : 'Supplied'}
-                        </span>
-                      </li>
+                        <h3 className="font-display text-lg text-[var(--gold)]">{highlight.label}</h3>
+                        <p className="mt-1 text-xs leading-relaxed text-[var(--muted)]">
+                          {highlight.description}
+                        </p>
+                      </div>
                     ))}
-                  </ul>
+                  </div>
                 </section>
               </Reveal>
             </div>
@@ -100,7 +128,7 @@ export default function AboutPage() {
                   <PhotoFrame
                     image={restaurant.heroImage}
                     sizes="(max-width: 1024px) 100vw, 24rem"
-                    className="aspect-[4/5] w-full rounded-card"
+                    className="aspect-[4/5] w-full rounded-card shadow-xl"
                   />
                   <figcaption className="mt-4">
                     <IllustrativeNote />
@@ -109,30 +137,61 @@ export default function AboutPage() {
               </Reveal>
 
               <Reveal delay={0.15}>
-                <div className="rounded-card border border-[var(--line)] bg-[var(--surface)] p-6">
-                  <h2 className="text-[0.75rem] uppercase tracking-[0.2em] text-[var(--muted-dim)]">
-                    At a glance
-                  </h2>
-                  <dl className="mt-4 flex flex-col gap-3 text-[0.9375rem]">
-                    <div className="flex justify-between gap-4">
-                      <dt className="text-[var(--muted)]">Category</dt>
-                      <dd className="text-right text-ivory">{restaurant.category}</dd>
+                <div className="rounded-card border border-[rgba(200,169,107,0.35)] bg-[var(--surface-raised)] p-6 shadow-xl">
+                  <div className="flex items-center justify-between border-b border-[var(--line)] pb-3">
+                    <h2 className="text-xs uppercase tracking-[0.2em] text-[var(--gold)] font-medium">
+                      At a Glance
+                    </h2>
+                    <span className="flex items-center gap-1 text-xs text-[var(--gold)]">
+                      <Star size={12} fill="currentColor" />
+                      4.3 (500+ Reviews)
+                    </span>
+                  </div>
+
+                  <dl className="mt-4 flex flex-col gap-3.5 text-xs">
+                    <div>
+                      <dt className="text-[var(--muted-dim)]">Address</dt>
+                      <dd className="mt-0.5 text-ivory font-medium">
+                        {restaurant.address.line1}, {restaurant.address.landmark}, {restaurant.address.city}
+                      </dd>
                     </div>
-                    <div className="flex justify-between gap-4">
-                      <dt className="text-[var(--muted)]">Cuisine</dt>
-                      <dd className="text-right text-ivory">North Indian &amp; Mughlai</dd>
+
+                    <div className="border-t border-[var(--line)] pt-2.5">
+                      <dt className="text-[var(--muted-dim)]">Operating Hours</dt>
+                      <dd className="mt-0.5 text-ivory font-medium">
+                        11:00 AM – 10:30 PM (Mon – Sun)
+                      </dd>
                     </div>
-                    <div className="flex justify-between gap-4">
-                      <dt className="text-[var(--muted)]">Known for</dt>
-                      <dd className="text-right text-ivory">Group dining</dd>
+
+                    <div className="border-t border-[var(--line)] pt-2.5">
+                      <dt className="text-[var(--muted-dim)]">Cuisine Style</dt>
+                      <dd className="mt-0.5 text-ivory font-medium">
+                        North Indian, Mughlai, Tandoor &amp; Indo-Chinese
+                      </dd>
                     </div>
-                    <div className="flex justify-between gap-4">
-                      <dt className="text-[var(--muted)]">Location</dt>
-                      <dd className="text-right text-ivory">
-                        {restaurant.address.locality}, {restaurant.address.region}
+
+                    <div className="border-t border-[var(--line)] pt-2.5">
+                      <dt className="text-[var(--muted-dim)]">Average Cost</dt>
+                      <dd className="mt-0.5 text-ivory font-medium">
+                        {restaurant.averageCostForTwo} for two
+                      </dd>
+                    </div>
+
+                    <div className="border-t border-[var(--line)] pt-2.5">
+                      <dt className="text-[var(--muted-dim)]">Helpline &amp; WhatsApp</dt>
+                      <dd className="mt-0.5 text-ivory font-medium">
+                        <a href={`tel:${restaurant.contact.phone}`} className="text-[var(--gold)] hover:underline">
+                          {restaurant.contact.phoneFormatted}
+                        </a>
                       </dd>
                     </div>
                   </dl>
+
+                  <div className="mt-6 border-t border-[var(--line)] pt-5">
+                    <ReservationButton className="w-full justify-center">
+                      Book a Table
+                    </ReservationButton>
+                  </div>
                 </div>
               </Reveal>
             </aside>

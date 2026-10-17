@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from 'next';
-import { Fraunces, Inter } from 'next/font/google';
+import { Cormorant_Garamond, Inter } from 'next/font/google';
 
 import { SiteFooter } from '@/components/site-footer';
 import { SiteNav } from '@/components/site-nav';
@@ -9,12 +9,12 @@ import { siteConfig } from '@/lib/site';
 
 import './globals.css';
 
-const display = Fraunces({
+const display = Cormorant_Garamond({
   subsets: ['latin'],
   display: 'swap',
   variable: '--font-display',
-  // Variable font: `axes` requires omitting an explicit `weight` list.
-  axes: ['SOFT', 'WONK'],
+  weight: ['400', '500', '600', '700'],
+  style: ['normal', 'italic'],
 });
 
 const sans = Inter({
@@ -77,33 +77,22 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: '#101010',
-  colorScheme: 'dark',
+  themeColor: '#FAF7F2',
+  colorScheme: 'light',
   width: 'device-width',
   initialScale: 1,
   // Deliberately capped: user zoom must never be disabled.
   maximumScale: 5,
 };
 
+import { ReservationProvider } from '@/components/reservation-context';
+
 export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en-IN" className={`${display.variable} ${sans.variable}`}>
-      <body className="bg-charcoal text-ivory antialiased">
-        {/*
-          Scroll-revealed sections are animated by Framer Motion, which ships
-          inline `opacity:0` on the server. If JavaScript never runs they would
-          stay invisible, so CSS restores them when scripting is unavailable.
-
-          This is done two ways on purpose, and neither touches the DOM React
-          owns:
-            · `@media (scripting: none)` in globals.css  — modern browsers
-            · this <noscript> block                         — legacy browsers
-          An earlier version used a `no-js` class removed by an inline script,
-          which mutated <html> before hydration and caused a hydration
-          mismatch. This approach has no such side effect.
-        */}
+      <body className="bg-[#FAF7F2] text-stone-900 antialiased">
         <noscript>
           <style>{`.reveal-motion{opacity:1!important;transform:none!important}`}</style>
         </noscript>
@@ -114,13 +103,15 @@ export default function RootLayout({
 
         <div className="grain-overlay" aria-hidden="true" />
 
-        <SiteNav />
+        <ReservationProvider>
+          <SiteNav />
 
-        <main id="main" tabIndex={-1} className="focus:outline-none">
-          {children}
-        </main>
+          <main id="main" tabIndex={-1} className="focus:outline-none">
+            {children}
+          </main>
 
-        <SiteFooter />
+          <SiteFooter />
+        </ReservationProvider>
 
         <script
           type="application/ld+json"

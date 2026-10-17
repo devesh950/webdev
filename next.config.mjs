@@ -4,8 +4,8 @@ const nextConfig = {
   poweredByHeader: false,
   images: {
     formats: ['image/avif', 'image/webp'],
-    // Allow the qualities used across the site. Next 16 will require this.
-    qualities: [75, 80, 85],
+    // Allow the qualities used across the site. Next 15+ enforces this strictly.
+    qualities: [50, 75, 80, 85, 90, 95],
     remotePatterns: [
       {
         protocol: 'https',

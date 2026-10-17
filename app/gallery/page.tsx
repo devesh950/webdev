@@ -53,7 +53,7 @@ export default function GalleryPage() {
           </Reveal>
 
           <Reveal delay={0.15} className="mt-10">
-            <div className="rounded-card border border-dashed border-[var(--line-strong)] bg-[rgba(247,243,235,0.02)] p-7">
+            <div className="rounded-card border border-dashed border-[var(--line-strong)] bg-white p-7 shadow-sm">
               <h2 className="font-display text-[1.25rem] text-ivory">
                 Photography of the restaurant itself
               </h2>

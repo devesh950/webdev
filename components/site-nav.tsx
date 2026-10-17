@@ -1,201 +1,152 @@
 'use client';
 
-import { AnimatePresence, motion, useReducedMotion, useScroll, useSpring } from 'framer-motion';
-import { Menu, X } from 'lucide-react';
+import { AnimatePresence, motion } from 'framer-motion';
+import { Calendar, Menu, Phone, X } from 'lucide-react';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
 import { restaurant } from '@/data/restaurant';
-import { siteConfig } from '@/lib/site';
-import { cn } from '@/lib/utils';
 
-const linkMotion = {
-  hidden: { opacity: 0, y: 14 },
-  show: { opacity: 1, y: 0 },
-};
+const navLinks = [
+  { label: 'Story', href: '#story' },
+  { label: 'Signatures', href: '#dishes' },
+  { label: 'Menu', href: '#menu' },
+  { label: 'Gallery', href: '#gallery' },
+  { label: 'Reviews', href: '#testimonials' },
+  { label: 'Reservation', href: '#reservation' },
+  { label: 'Location', href: '#contact' },
+];
 
 export function SiteNav() {
-  const pathname = usePathname();
-  const reduceMotion = useReducedMotion();
   const [scrolled, setScrolled] = useState(false);
-  const [menuOpen, setMenuOpen] = useState(false);
-
-  const { scrollYProgress } = useScroll();
-  const progress = useSpring(scrollYProgress, {
-    stiffness: 140,
-    damping: 28,
-    restDelta: 0.001,
-  });
+  const [drawerOpen, setDrawerOpen] = useState(false);
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 40);
+    const onScroll = () => {
+      setScrolled(window.scrollY > 40);
+    };
     onScroll();
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
-  // Close the drawer on navigation.
+  // Lock body scroll when mobile drawer is open
   useEffect(() => {
-    setMenuOpen(false);
-  }, [pathname]);
-
-  // Lock body scroll while the drawer is open.
-  useEffect(() => {
-    if (!menuOpen) return;
-    const previous = document.body.style.overflow;
-    document.body.style.overflow = 'hidden';
-    return () => {
-      document.body.style.overflow = previous;
-    };
-  }, [menuOpen]);
-
-  useEffect(() => {
-    const onKey = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') setMenuOpen(false);
-    };
-    window.addEventListener('keydown', onKey);
-    return () => window.removeEventListener('keydown', onKey);
-  }, []);
-
-  const isActive = (href: string) =>
-    href === '/' ? pathname === '/' : pathname.startsWith(href);
+    if (drawerOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+  }, [drawerOpen]);
 
   return (
     <>
       <header
-        className={cn(
-          'anim-fade-up fixed inset-x-0 top-0 z-50 transition-[background-color,backdrop-filter,border-color] duration-500',
-          scrolled || menuOpen
-            ? 'border-b border-[var(--line)] bg-[rgba(16,16,16,0.82)] backdrop-blur-xl'
-            : 'border-b border-transparent bg-transparent',
-        )}
+        className={`fixed inset-x-0 top-0 z-40 transition-all duration-500 ${
+          scrolled || drawerOpen
+            ? 'border-b border-stone-200/80 bg-white/85 backdrop-blur-xl shadow-sm py-3.5'
+            : 'border-b border-transparent bg-transparent py-5'
+        }`}
       >
-        <nav
-          aria-label="Primary"
-          className="shell-wide flex h-[var(--nav-height)] items-center justify-between gap-6"
-        >
-          <Link href="/" className="group flex items-center gap-3" aria-label={`${restaurant.name} — home`}>
-            <span
-              aria-hidden="true"
-              className="grid h-9 w-9 place-items-center rounded-full border border-[rgba(200,169,107,0.4)] bg-[rgba(200,169,107,0.08)] transition-colors duration-500 group-hover:border-[var(--gold)]"
-            >
-              <svg viewBox="0 0 40 40" className="h-[18px] w-[18px]" fill="none" stroke="var(--gold)" strokeWidth="2.4" strokeLinecap="round">
-                <circle cx="20" cy="20" r="13" />
-                <path d="M7 20h26" />
-              </svg>
+        <div className="shell flex items-center justify-between">
+          {/* Logo / Brand Name */}
+          <a
+            href="#hero"
+            className="group flex flex-col leading-none"
+            aria-label={`${restaurant.name} — Home`}
+          >
+            <span className="font-display text-2xl font-bold tracking-tight text-stone-900 transition-colors duration-300 group-hover:text-amber-800">
+              {restaurant.name}
             </span>
-            <span className="flex flex-col leading-none">
-              <span className="font-display text-[1.02rem] tracking-[0.01em] text-ivory">
-                The Taj
-              </span>
-              <span className="mt-1 text-[0.56rem] uppercase tracking-[0.3em] text-[var(--gold)]">
-                Multicuisine · Hajipur
-              </span>
+            <span className="mt-1 text-[0.5625rem] font-bold uppercase tracking-[0.28em] text-amber-800">
+              Fine Dining · Hajipur
             </span>
-          </Link>
+          </a>
 
-          <ul className="hidden items-center gap-7 lg:flex">
-            {siteConfig.primaryNav.map((item) => (
-              <li key={item.href}>
-                <Link
-                  href={item.href}
-                  aria-current={isActive(item.href) ? 'page' : undefined}
-                  className={cn(
-                    'link-underline text-[0.85rem] transition-colors duration-300',
-                    isActive(item.href) ? 'text-[var(--gold)]' : 'text-[var(--muted)] hover:text-ivory',
-                  )}
-                >
-                  {item.label}
-                </Link>
-              </li>
+          {/* Desktop Nav Links */}
+          <nav aria-label="Main Navigation" className="hidden lg:flex items-center gap-7">
+            {navLinks.map((link) => (
+              <a
+                key={link.href}
+                href={link.href}
+                className="text-xs font-semibold uppercase tracking-[0.18em] text-stone-700 transition-colors duration-300 hover:text-amber-800"
+              >
+                {link.label}
+              </a>
             ))}
-          </ul>
+          </nav>
 
-          <div className="hidden items-center gap-3 lg:flex">
+          {/* Desktop Action Buttons */}
+          <div className="hidden lg:flex items-center gap-3">
             <a
-              href={restaurant.googleMaps.directionsUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="btn btn-primary min-h-[42px] px-5 text-[0.8125rem]"
+              href={`tel:${restaurant.contact.phone}`}
+              className="flex items-center gap-2 rounded-full border border-stone-200 bg-white/80 px-3.5 py-2 text-xs font-semibold text-stone-800 shadow-sm hover:border-amber-600 hover:text-amber-800 transition-colors backdrop-blur-md"
             >
-              Get Directions
+              <Phone size={13} className="text-amber-700" />
+              <span>{restaurant.contact.phoneFormatted}</span>
+            </a>
+
+            <a
+              href="#reservation"
+              className="btn btn-primary min-h-[40px] px-5 text-xs uppercase tracking-wider font-semibold"
+            >
+              <Calendar size={13} />
+              Book Table
             </a>
           </div>
 
+          {/* Mobile Hamburger Toggle Button */}
           <button
             type="button"
-            onClick={() => setMenuOpen((open) => !open)}
-            aria-expanded={menuOpen}
-            aria-controls="mobile-menu"
-            aria-label={menuOpen ? 'Close menu' : 'Open menu'}
-            className="grid h-11 w-11 place-items-center rounded-full border border-[var(--line-strong)] text-ivory transition-colors duration-300 hover:border-[var(--gold)] hover:text-[var(--gold)] lg:hidden"
+            onClick={() => setDrawerOpen(!drawerOpen)}
+            aria-label={drawerOpen ? 'Close Navigation Menu' : 'Open Navigation Menu'}
+            className="grid h-10 w-10 place-items-center rounded-full border border-stone-300 bg-white/80 text-stone-800 shadow-sm lg:hidden transition-colors hover:border-amber-600 hover:text-amber-800"
           >
-            {menuOpen ? <X size={18} /> : <Menu size={18} />}
+            {drawerOpen ? <X size={20} /> : <Menu size={20} />}
           </button>
-        </nav>
-
-        {/* Reading-progress rule — a quiet touch, hidden from assistive tech. */}
-        <motion.div
-          aria-hidden="true"
-          style={{ scaleX: progress }}
-          className="h-px origin-left bg-gradient-to-r from-[var(--gold)] to-[var(--bronze)]"
-        />
+        </div>
       </header>
 
+      {/* Mobile Drawer (Frosted Glass) */}
       <AnimatePresence>
-        {menuOpen && (
+        {drawerOpen && (
           <motion.div
-            id="mobile-menu"
-            key="mobile-menu"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.35 }}
-            className="fixed inset-0 z-40 bg-[rgba(16,16,16,0.97)] backdrop-blur-2xl lg:hidden"
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ duration: 0.3 }}
+            className="fixed inset-0 z-30 flex flex-col justify-between bg-white/95 px-6 pt-28 pb-10 backdrop-blur-2xl lg:hidden"
           >
-            <div className="shell flex h-full flex-col justify-center gap-8 pt-[var(--nav-height)]">
-              <ul className="flex flex-col gap-1">
-                {siteConfig.primaryNav.map((item, index) => (
-                  <motion.li
-                    key={item.href}
-                    variants={linkMotion}
-                    initial={reduceMotion ? undefined : 'hidden'}
-                    animate="show"
-                    transition={{ delay: 0.06 * index + 0.08, duration: 0.5 }}
-                  >
-                    <Link
-                      href={item.href}
-                      onClick={() => setMenuOpen(false)}
-                      className="block border-b border-[var(--line)] py-4 font-display text-[2rem] text-ivory"
-                    >
-                      {item.label}
-                    </Link>
-                  </motion.li>
-                ))}
-              </ul>
-
-              <motion.div
-                variants={linkMotion}
-                initial={reduceMotion ? undefined : 'hidden'}
-                animate="show"
-                transition={{ delay: 0.4, duration: 0.5 }}
-                className="flex flex-col gap-3"
-              >
+            <nav className="flex flex-col space-y-5 text-center">
+              {navLinks.map((link) => (
                 <a
-                  href={restaurant.googleMaps.directionsUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  onClick={() => setMenuOpen(false)}
-                  className="btn btn-primary w-full"
+                  key={link.href}
+                  href={link.href}
+                  onClick={() => setDrawerOpen(false)}
+                  className="font-display text-2xl font-bold text-stone-900 transition-colors hover:text-amber-800"
                 >
-                  Get Directions
+                  {link.label}
                 </a>
-                <p className="text-[0.8125rem] text-[var(--muted-dim)]">
-                  {restaurant.address.locality}, {restaurant.address.region},{' '}
-                  {restaurant.address.country}
-                </p>
-              </motion.div>
+              ))}
+            </nav>
+
+            <div className="flex flex-col gap-3 pt-8 border-t border-stone-200">
+              <a
+                href="#reservation"
+                onClick={() => setDrawerOpen(false)}
+                className="btn btn-primary w-full py-3.5 text-xs uppercase tracking-wider text-center justify-center font-semibold"
+              >
+                <Calendar size={14} />
+                Reserve a Table
+              </a>
+
+              <a
+                href={`tel:${restaurant.contact.phone}`}
+                className="btn btn-ghost w-full py-3.5 text-xs uppercase tracking-wider text-center justify-center font-semibold"
+              >
+                <Phone size={14} className="text-amber-700" />
+                Call {restaurant.contact.phoneFormatted}
+              </a>
             </div>
           </motion.div>
         )}

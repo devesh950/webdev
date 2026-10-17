@@ -25,7 +25,7 @@ export function UnverifiedPanel({
         'rounded-card border border-dashed p-7',
         variant === 'notice'
           ? 'border-[rgba(200,169,107,0.4)] bg-[rgba(200,169,107,0.05)]'
-          : 'border-[var(--line-strong)] bg-[rgba(247,243,235,0.02)]',
+          : 'border-[var(--line-strong)] bg-white shadow-sm',
       ].join(' ')}
     >
       <div className="flex gap-4">
