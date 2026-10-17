@@ -444,7 +444,7 @@ section {
   object-fit: cover;
   border-radius: 50%;
 }
-.fcard {
+#hero .fcard {
   position: absolute;
   background: #fff;
   border-radius: 11px;
@@ -454,17 +454,17 @@ section {
   align-items: center;
   gap: 9px;
 }
-.fcard.fc1 {
+#hero .fcard.fc1 {
   top: 55px;
   left: -15px;
   animation: fltc 4s ease-in-out infinite;
 }
-.fcard.fc2 {
+#hero .fcard.fc2 {
   bottom: 75px;
   right: -25px;
   animation: fltc 4s ease-in-out infinite 1.5s;
 }
-.fcard.fc3 {
+#hero .fcard.fc3 {
   top: 38%;
   right: -45px;
   animation: fltc 4s ease-in-out infinite 0.8s;
@@ -1427,11 +1427,15 @@ section {
 .fctrl:focus {
   border-color: var(--primary);
 }
-.fcard {
+#reservation .fcard,
+.rescard {
+  position: relative !important;
+  display: block !important;
   background: #fff;
   border-radius: 18px;
   padding: 32px;
   box-shadow: 0 6px 30px rgba(0, 0, 0, 0.08);
+  width: 100%;
 }
 .sucmsg {
   display: none;
@@ -2545,7 +2549,11 @@ section, header, nav, footer,
   }
 
   /* Reservation Card */
-  .fcard {
+  #reservation .fcard,
+  .rescard {
+    position: relative !important;
+    display: block !important;
+    width: 100% !important;
     padding: 22px 16px;
   }
 
