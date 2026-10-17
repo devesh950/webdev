@@ -1,15 +1,3 @@
-node_modules
-.next
-out
-build
-prototype
-.data
-.next-env.d.ts
-*.tsbuildinfo
-.data
-
-# local audit tooling + captured screenshots
-audit.mjs
-shots.mjs
-.shots
-nojs-check.png
+.DS_Store
+Thumbs.db
+*.log
