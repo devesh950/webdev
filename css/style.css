@@ -16,12 +16,18 @@
 }
 html {
   scroll-behavior: smooth;
+  overflow-x: hidden !important;
+  width: 100% !important;
+  max-width: 100vw !important;
 }
 body {
   font-family: "Poppins", sans-serif;
   color: #444;
   background: #fff;
-  overflow-x: hidden;
+  overflow-x: hidden !important;
+  width: 100% !important;
+  max-width: 100vw !important;
+  position: relative;
 }
 h1,
 h2,
@@ -2322,18 +2328,59 @@ footer {
   color: #fff !important;
 }
 
-/* ===================== RESPONSIVE ===================== */
+/* ===================== RESPONSIVE & MOBILE FIXES ===================== */
+
+/* Universal mobile horizontal overflow prevention */
+html, body {
+  overflow-x: clip !important;
+  overflow-x: hidden !important;
+  max-width: 100vw !important;
+  width: 100% !important;
+}
+
+section, header, nav, footer,
+#topbar, #nav, #hero, .mqsec, #category, #about, #menu,
+#special, #gallery, #history, #chefs, #hours, #testimonials,
+#reservation, #blog, #newsletter, #contact-section,
+.container, .container-fluid {
+  max-width: 100% !important;
+  overflow-x: clip;
+}
+
+/* @media (max-width: 991px) - Tablets & Small Desktops */
 @media (max-width: 991px) {
+  /* Hero */
+  .hbgtxt {
+    display: none !important;
+  }
   .hcircle {
     width: 320px;
     height: 320px;
+    max-width: 80vw;
   }
-  .fc1,
-  .fc2,
-  .fc3 {
-    transform: scale(0.82);
-    transform-origin: center;
+  .fcard.fc1,
+  .fcard.fc2,
+  .fcard.fc3 {
+    display: none !important;
   }
+  .hs1, .hs2 {
+    display: none !important;
+  }
+  
+  /* Navbar */
+  .navbar-nav .nav-link {
+    padding: 10px 0 !important;
+  }
+  .navbar-nav .nav-link::after {
+    display: none;
+  }
+  #navmenu {
+    padding: 16px 0;
+    border-top: 1px solid #f0f0f0;
+    margin-top: 10px;
+  }
+
+  /* Gallery */
   .ggrid {
     grid-template-columns: 1fr 1fr;
     grid-template-rows: auto;
@@ -2341,9 +2388,19 @@ footer {
   .gitem:first-child {
     grid-row: span 1;
   }
+
+  /* About */
   .asm {
-    display: none;
+    display: none !important;
   }
+  .aexp {
+    position: static !important;
+    display: inline-block !important;
+    margin-bottom: 20px !important;
+    left: 0 !important;
+  }
+
+  /* Dish popup modal */
   .mpbox .mpimg,
   .mpbox .mpbody {
     width: 100%;
@@ -2355,12 +2412,14 @@ footer {
   .mpbox .mpbody {
     padding: 22px 18px;
   }
-  /* Timeline mobile: collapse to single column */
+
+  /* Timeline */
   .timeline::before {
     left: 16px;
   }
   .tli {
     grid-template-columns: 32px 1fr !important;
+    gap: 0;
   }
   .tl-left {
     display: none !important;
@@ -2380,58 +2439,240 @@ footer {
     display: block !important;
   }
 }
+
+/* @media (max-width: 767px) - Mobile Landscape & Standard Phones */
 @media (max-width: 767px) {
   section {
-    padding: 55px 0;
+    padding: 48px 0;
   }
+
+  /* Topbar mobile cleanup: Stack & prevent overflow */
+  #topbar {
+    padding: 6px 0;
+  }
+  #topbar .top-contact {
+    gap: 6px;
+  }
+  #topbar .top-contact span {
+    margin-right: 0 !important;
+    font-size: 0.75rem;
+  }
+  /* Hide email and physical address in topbar on mobile to prevent squishing/overflow */
+  #topbar .top-contact span:nth-child(2),
   #topbar .top-contact span:last-child {
-    display: none;
+    display: none !important;
+  }
+  #topbar .ttag {
+    font-size: 0.64rem;
+    padding: 2px 7px;
+  }
+  #topbar .tsoc a {
+    width: 25px;
+    height: 25px;
+    font-size: 0.7rem;
+    margin-left: 2px;
+  }
+
+  /* Hero */
+  .htitle {
+    font-size: clamp(2rem, 7.5vw, 2.7rem);
+    line-height: 1.15;
+    margin-bottom: 14px;
+    word-break: break-word;
+  }
+  .hdesc {
+    font-size: 0.92rem;
+    line-height: 1.6;
+    margin-bottom: 22px;
   }
   .hcircle {
-    width: 260px;
-    height: 260px;
-  }
-  /* Hide only hero floating cards, NOT form cards */
-  .fcard.fc1,
-  .fcard.fc2,
-  .fcard.fc3 {
-    display: none !important;
+    width: 240px;
+    height: 240px;
+    max-width: 75vw;
   }
   .hstats {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-top: 24px;
+    padding: 16px;
+    background: rgba(255, 255, 255, 0.7);
+    border-radius: 14px;
+  }
+  .sdiv {
     display: none !important;
   }
-  .ggrid {
-    grid-template-columns: 1fr 1fr;
+  .hstat .snum {
+    font-size: 1.55rem;
+  }
+
+  /* Specials */
+  .sptitle {
+    font-size: 2.2rem;
   }
   .cdwrap {
     gap: 8px;
+    flex-wrap: wrap;
+    justify-content: flex-start;
   }
   .cditem {
-    min-width: 56px;
-    padding: 9px;
+    min-width: 58px;
+    padding: 9px 12px;
   }
+  .cdnum {
+    font-size: 1.6rem;
+  }
+  .spglow {
+    width: 260px;
+    height: 260px;
+    max-width: 80vw;
+  }
+  .spimgw img {
+    max-width: 280px;
+  }
+
+  /* Newsletter */
   .nl-form-wrap {
     flex-direction: column;
-    padding: 0 8px;
+    padding: 0;
+    gap: 10px;
   }
   .nlinput,
   .nlbtn {
     width: 100%;
     border-radius: 12px;
+    text-align: center;
   }
+
+  /* Reservation Card */
   .fcard {
-    padding: 22px 18px;
+    padding: 22px 16px;
+  }
+
+  /* Hours Card */
+  .hrscard {
+    padding: 20px 16px;
+  }
+  .hrscta {
+    padding: 22px 16px;
+    margin-top: 20px;
+  }
+
+  /* Contact */
+  .ctdark {
+    padding: 26px 18px;
+  }
+
+  /* Footer */
+  footer {
+    padding: 48px 0 0;
+  }
+  .fbot .d-flex {
+    flex-direction: column;
+    text-align: center;
+    gap: 8px;
+  }
+  .fbot a {
+    margin: 0 9px;
   }
 }
-@media (max-width: 480px) {
+
+/* @media (max-width: 576px) - Small Mobile Devices */
+@media (max-width: 576px) {
+  /* Navbar */
+  .bname {
+    font-size: 1.25rem;
+  }
+  .bico {
+    width: 38px;
+    height: 38px;
+    font-size: 1.1rem;
+  }
+
+  /* Gallery mobile: 2-column or 1-column */
+  .ggrid {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto;
+    gap: 10px;
+  }
+  .gitem {
+    height: 190px;
+  }
+  .gitem:first-child {
+    grid-row: span 1;
+  }
+
+  /* Menu filter tabs */
+  .mfrow {
+    flex-wrap: wrap;
+    gap: 6px;
+    justify-content: center;
+  }
+  .mfitem {
+    padding: 7px 14px;
+    font-size: 0.78rem;
+  }
+
+  /* About */
+  .amain img {
+    height: 260px;
+  }
+
+  /* Floating action buttons */
+  #btt {
+    bottom: 16px;
+    right: 16px;
+    width: 40px;
+    height: 40px;
+  }
+  .cartfl {
+    bottom: 16px;
+    left: 16px;
+    padding: 9px 14px;
+    font-size: 0.78rem;
+  }
+
+  /* Search Overlay */
+  .sovbox h4 {
+    font-size: 1.2rem;
+  }
+  .sovinput input {
+    padding: 12px 16px;
+    font-size: 0.88rem;
+  }
+  .sovinput button {
+    padding: 0 18px;
+  }
+}
+
+/* @media (max-width: 420px) - Extra Small Phone Screens */
+@media (max-width: 420px) {
+  #topbar .ttag {
+    display: none; /* Hide badge on very narrow screens so phone & social icons fit cleanly on 1 line */
+  }
   .hcircle {
-    width: 220px;
-    height: 220px;
+    width: 200px;
+    height: 200px;
   }
   .htitle {
-    font-size: 2.4rem;
+    font-size: 1.9rem;
   }
   .stitle {
-    font-size: 1.8rem;
+    font-size: 1.65rem;
+  }
+  .btn-red, .btn-play {
+    width: 100%;
+    justify-content: center;
+  }
+  .cditem {
+    min-width: 50px;
+    padding: 7px 8px;
+  }
+  .cdnum {
+    font-size: 1.35rem;
+  }
+  .cdlbl {
+    font-size: 0.58rem;
   }
 }
+
